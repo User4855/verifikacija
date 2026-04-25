@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verifikacija u toku</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(245, 190, 70, 0.22), transparent 32%),
+        linear-gradient(135deg, #050505, #111111 45%, #050505);
+      color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: linear-gradient(180deg, #151515, #090909);
+      border: 1px solid rgba(245, 190, 70, 0.38);
+      border-radius: 28px;
+      padding: 34px;
+      text-align: center;
+      box-shadow: 0 25px 80px rgba(0,0,0,.65);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 14px 14px;
+      border-radius: 999px;
+      background: rgba(245,190,70,.12);
+      color: #f5be46;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      width: 180px;
+      height: 30px;
+      margin: 0 auto 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #f5be46, #8d6416);
+      color: #090909;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      box-shadow: 0 12px 32px rgba(245,190,70,.25);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      color: #ffffff;
+    }
+
+    .subtitle {
+      margin: 0 auto 28px;
+      max-width: 390px;
+      color: #b9b9b9;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .status-box {
+      background: #0f0f0f;
+      border: 1px solid rgba(245,190,70,.22);
+      border-radius: 20px;
+      padding: 20px;
+      margin: 28px 0;
+      text-align: left;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: 14px;
+    }
+
+    .row:last-child { border-bottom: none; }
+
+    .label { color: #898989; }
+    .value { color: #f5be46; font-weight: 800; text-align: right; }
+
+    .loader {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 5px solid rgba(245,190,70,.14);
+      border-top-color: #f5be46;
+      margin: 28px auto;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .progress {
+      height: 10px;
+      width: 100%;
+      background: #262626;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 18px;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #8d6416, #f5be46);
+      border-radius: 999px;
+      transition: width .4s;
+    }
+
+    .qr-section {
+      display: none;
+      animation: fadeIn .7s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .qr-box {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 22px;
+      display: inline-block;
+      margin: 20px 0;
+      box-shadow: 0 16px 40px rgba(245,190,70,.18);
+    }
+
+    .qr-box img {
+      width: 230px;
+      height: 230px;
+      display: block;
+    }
+
+    .warning {
+      margin-top: 26px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(245,190,70,.10);
+      color: #f5d891;
+      font-size: 13px;
+      line-height: 1.55;
+      border: 1px solid rgba(245,190,70,.22);
+    }
+
+    .footer {
+      margin-top: 26px;
+      color: #777;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="card">
+    <div class="badge"></div>
+
+    <div class="logo">Kriptomat.hr</div>
+
+    <h1 id="mainTitle">Verifikacija u toku</h1>
+
+    <p class="subtitle" id="mainText">
+      Molimo pričekajte dok se obrađuje status verifikacije.
+    </p>
+
+    <div id="loadingArea">
+      <div class="loader"></div>
+
+      <div class="status-box">
+        <div class="row">
+          <span class="label">Referenca</span>
+          <span class="value">QR-48291</span>
+        </div>
+        <div class="row">
+          <span class="label">Status</span>
+          <span class="value">Obrada u toku</span>
+        </div>
+        <div class="row">
+          <span class="label">Tip provjere</span>
+          <span class="value">Deklaracija sredstava</span>
+        </div>
+      </div>
+
+      <div class="progress">
+        <div class="bar" id="bar"></div>
+      </div>
+
+      <p class="footer" id="timerText">Preostalo vrijeme: 15s</p>
+    </div>
+
+    <section class="qr-section" id="qrSection">
+      <h1>Vaš osobni QR kod</h1>
+
+      <p class="subtitle">
+        QR kod vašeg osobnog računa je prikazan ispod. Ovaj QR kod koristite prilikom isplate sredstava.
+      </p>
+
+      <div class="qr-box">
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?size=230x230&data=ANTI-PHISHING-DEMO-SESSION-DEMO-QR-48291"
+          alt="Demo QR kod"
+        />
+      </div>
+
+      <div class="status-box">
+        <div class="row">
+          <span class="label">QR status</span>
+          <span class="value">Generirano</span>
+        </div>
+        <div class="row">
+          <span class="label">Sesija</span>
+          <span class="value">Transakcija u toku</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="warning">
+      <strong>Napomena:</strong> Strogo je zabranjena zloupotreba QR koda. Kod koristite isključivo prilikom podizanja sredstava sa Vaseg računa.
+    </div>
+
+    <div class="footer">
+      © 2026 Kriptomat.hr
+    </div>
+  </main>
+
+  <script>
+    let seconds = 15;
+    let progress = 0;
+
+    const timerText = document.getElementById("timerText");
+    const bar = document.getElementById("bar");
+    const loadingArea = document.getElementById("loadingArea");
+    const qrSection = document.getElementById("qrSection");
+    const mainTitle = document.getElementById("mainTitle");
+    const mainText = document.getElementById("mainText");
+
+    const interval = setInterval(() => {
+      seconds--;
+      progress += 100 / 15;
+
+      timerText.textContent = "Molimo sačekajte: " + seconds + "s";
+      bar.style.width = progress + "%";
+
+      if (seconds <= 0) {
+        clearInterval(interval);
+
+        loadingArea.style.display = "none";
+        qrSection.style.display = "block";
+
+        mainTitle.style.display = "none";
+        mainText.style.display = "none";
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>
