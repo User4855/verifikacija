@@ -6,177 +6,196 @@
 <title>Verifikacija</title>
 
 <style>
-* { box-sizing: border-box; }
+* { box-sizing:border-box; }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
+  margin:0;
+  min-height:100vh;
+  font-family:Arial, Helvetica, sans-serif;
   background:
     radial-gradient(circle at top, rgba(245,190,70,.22), transparent 32%),
-    linear-gradient(135deg, #050505, #111111 45%, #050505);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+    linear-gradient(135deg,#050505,#111 45%,#050505);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
 }
 
 .card {
-  width: 100%;
-  max-width: 520px;
-  background: linear-gradient(180deg, #151515, #090909);
-  border: 1px solid rgba(245,190,70,.38);
-  border-radius: 28px;
-  padding: 34px;
-  text-align: center;
-  box-shadow: 0 25px 80px rgba(0,0,0,.65);
+  width:100%;
+  max-width:520px;
+  background:linear-gradient(180deg,#151515,#090909);
+  border:1px solid rgba(245,190,70,.38);
+  border-radius:28px;
+  padding:34px;
+  text-align:center;
+  box-shadow:0 25px 80px rgba(0,0,0,.65);
 }
 
 .logo {
-  width: 180px;
-  height: 34px;
-  margin: 0 auto 22px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #f5be46, #8d6416);
-  color: #090909;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  font-weight: 800;
-  box-shadow: 0 12px 32px rgba(245,190,70,.25);
+  width:190px;
+  height:36px;
+  margin:0 auto 22px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#f5be46,#8d6416);
+  color:#090909;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:900;
+  box-shadow:0 12px 32px rgba(245,190,70,.25);
+}
+
+.badge {
+  display:inline-block;
+  padding:9px 14px;
+  border-radius:999px;
+  background:rgba(245,190,70,.12);
+  color:#f5be46;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.8px;
+  margin-bottom:22px;
 }
 
 h1 {
-  margin: 0 0 12px;
-  font-size: 30px;
+  margin:0 0 12px;
+  font-size:30px;
 }
 
 .subtitle {
-  margin: 0 auto 28px;
-  max-width: 390px;
-  color: #b9b9b9;
-  font-size: 15px;
-  line-height: 1.6;
+  margin:0 auto 26px;
+  max-width:390px;
+  color:#b9b9b9;
+  font-size:15px;
+  line-height:1.6;
 }
 
 .qr-box {
-  background: #fff;
-  padding: 16px;
-  border-radius: 22px;
-  display: inline-block;
-  margin: 20px 0;
-  box-shadow: 0 16px 40px rgba(245,190,70,.18);
+  background:#fff;
+  padding:16px;
+  border-radius:22px;
+  display:inline-block;
+  margin:18px 0;
+  box-shadow:0 16px 40px rgba(245,190,70,.18);
 }
 
 .qr-box img {
-  width: 230px;
-  height: 230px;
-  display: block;
-}
-
-.btn {
-  margin-top: 18px;
-  padding: 15px 34px;
-  border: none;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #f5be46, #9f7219);
-  color: #090909;
-  font-size: 15px;
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 0 12px 30px rgba(245,190,70,.24);
+  width:230px;
+  height:230px;
+  display:block;
 }
 
 .status-box {
-  background: #0f0f0f;
-  border: 1px solid rgba(245,190,70,.22);
-  border-radius: 20px;
-  padding: 20px;
-  margin: 28px 0;
-  text-align: left;
+  background:#0f0f0f;
+  border:1px solid rgba(245,190,70,.22);
+  border-radius:20px;
+  padding:20px;
+  margin:26px 0;
+  text-align:left;
 }
 
 .row {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-  font-size: 14px;
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:14px;
 }
 
-.row:last-child { border-bottom: none; }
+.row:last-child { border-bottom:none; }
 
-.label { color: #898989; }
-.value { color: #f5be46; font-weight: 800; text-align: right; }
+.label { color:#898989; }
+.value { color:#f5be46; font-weight:800; text-align:right; }
+
+.btn {
+  margin-top:8px;
+  padding:15px 36px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,#f5be46,#9f7219);
+  color:#090909;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(245,190,70,.24);
+}
 
 .loader {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  border: 5px solid rgba(245,190,70,.14);
-  border-top-color: #f5be46;
-  margin: 28px auto;
-  animation: spin 1s linear infinite;
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  border:5px solid rgba(245,190,70,.14);
+  border-top-color:#f5be46;
+  margin:28px auto;
+  animation:spin 1s linear infinite;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform:rotate(360deg); } }
 
 .progress {
-  height: 10px;
-  width: 100%;
-  background: #262626;
-  border-radius: 999px;
-  overflow: hidden;
-  margin-top: 18px;
+  height:10px;
+  width:100%;
+  background:#262626;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:18px;
 }
 
 .bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #8d6416, #f5be46);
-  border-radius: 999px;
-  transition: width .4s;
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#8d6416,#f5be46);
+  border-radius:999px;
+  transition:width .4s;
 }
 
 .success-icon {
-  width: 84px;
-  height: 84px;
-  margin: 0 auto 22px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #00d084, #00a86b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 46px;
-  font-weight: 900;
-  box-shadow: 0 18px 45px rgba(0,208,132,.25);
+  width:88px;
+  height:88px;
+  margin:0 auto 22px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00d084,#00a86b);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:48px;
+  font-weight:900;
+  box-shadow:0 18px 45px rgba(0,208,132,.25);
 }
 
 .warning {
-  margin-top: 26px;
-  padding: 16px;
-  border-radius: 18px;
-  background: rgba(245,190,70,.10);
-  color: #f5d891;
-  font-size: 13px;
-  line-height: 1.55;
-  border: 1px solid rgba(245,190,70,.22);
+  margin-top:26px;
+  padding:16px;
+  border-radius:18px;
+  background:rgba(245,190,70,.10);
+  color:#f5d891;
+  font-size:13px;
+  line-height:1.55;
+  border:1px solid rgba(245,190,70,.22);
 }
 
 .footer {
-  margin-top: 26px;
-  color: #777;
-  font-size: 12px;
-  line-height: 1.5;
+  margin-top:22px;
+  color:#777;
+  font-size:12px;
+  line-height:1.5;
 }
 
-.hidden { display: none; }
+.hidden { display:none; }
+
+.fade {
+  animation:fadeIn .45s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:translateY(0); }
+}
 </style>
 </head>
 
@@ -186,12 +205,12 @@ h1 {
 
   <div class="logo">Kriptomat.hr</div>
 
-  <!-- PRVI EKRAN: QR -->
-  <section id="qrScreen">
+  <!-- 1: QR SCREEN -->
+  <section id="qrScreen" class="fade">
     <h1>Vaš osobni QR kod</h1>
 
     <p class="subtitle">
-      QR kod vašeg osobnog računa prikazan je ispod. Nakon skeniranja kliknite na dugme za nastavak procesa.
+      QR kod vašeg osobnog računa prikazan je ispod. Nakon pregleda kliknite na dugme za nastavak procesa.
     </p>
 
     <div class="qr-box">
@@ -207,17 +226,47 @@ h1 {
         <span class="label">Sesija</span>
         <span class="value">Transakcija u toku</span>
       </div>
+      <div class="row">
+        <span class="label">Referenca</span>
+        <span class="value">QR-48291</span>
+      </div>
     </div>
 
-    <button class="btn" onclick="startVerification()">NASTAVI</button>
+    <button class="btn" onclick="goVerification()">NASTAVI</button>
   </section>
 
-  <!-- DRUGI EKRAN: LOADING -->
-  <section id="loadingScreen" class="hidden">
+  <!-- 2: VERIFICATION CONFIRM SCREEN -->
+  <section id="verificationScreen" class="hidden fade">
     <h1>Verifikacija u toku</h1>
 
     <p class="subtitle">
-      Molimo pričekajte dok se obrađuje status verifikacije.
+      Potvrdite nastavak procesa verifikacije. Nakon potvrde započinje obrada statusa transakcije.
+    </p>
+
+    <div class="status-box">
+      <div class="row">
+        <span class="label">Status</span>
+        <span class="value">Spremno za obradu</span>
+      </div>
+      <div class="row">
+        <span class="label">Tip provjere</span>
+        <span class="value">Deklaracija sredstava</span>
+      </div>
+      <div class="row">
+        <span class="label">Vrijeme obrade</span>
+        <span class="value">15 sekundi</span>
+      </div>
+    </div>
+
+    <button class="btn" onclick="startLoading()">NASTAVI</button>
+  </section>
+
+  <!-- 3: LOADING SCREEN -->
+  <section id="loadingScreen" class="hidden fade">
+    <h1>Obrada zahtjeva</h1>
+
+    <p class="subtitle">
+      Molimo pričekajte dok se status verifikacije obrađuje.
     </p>
 
     <div class="loader"></div>
@@ -232,8 +281,8 @@ h1 {
         <span class="value">Obrada u toku</span>
       </div>
       <div class="row">
-        <span class="label">Tip provjere</span>
-        <span class="value">Deklaracija sredstava</span>
+        <span class="label">Provjera</span>
+        <span class="value">Aktivna</span>
       </div>
     </div>
 
@@ -244,11 +293,11 @@ h1 {
     <p class="footer" id="timerText">Molimo sačekajte: 15s</p>
   </section>
 
-  <!-- TREĆI EKRAN: SUCCESS -->
-  <section id="successScreen" class="hidden">
+  <!-- 4: SUCCESS SCREEN -->
+  <section id="successScreen" class="hidden fade">
     <div class="success-icon">✓</div>
 
-    <h1>Transakcija uspješna</h1>
+    <h1>Transakcija potvrđena</h1>
 
     <p class="subtitle">
       Proces je uspješno završen. Status transakcije je potvrđen.
@@ -263,11 +312,15 @@ h1 {
         <span class="label">Referenca</span>
         <span class="value">QR-48291</span>
       </div>
+      <div class="row">
+        <span class="label">Potvrda</span>
+        <span class="value">Završena</span>
+      </div>
     </div>
   </section>
 
   <div class="warning">
-    <strong>Napomena:</strong> QR kod koristiti isključivo prilikom podizanja sredstava sa Vašeg novčanika.
+    <strong>Napomena:</strong> Vaš osobni QR kod koristite isključivo prilikom isplate sredstava sa svog novčanika.
   </div>
 
   <div class="footer">
@@ -281,9 +334,31 @@ let seconds = 15;
 let progress = 0;
 let interval;
 
-function startVerification() {
+function showOnly(screenId) {
   document.getElementById("qrScreen").classList.add("hidden");
-  document.getElementById("loadingScreen").classList.remove("hidden");
+  document.getElementById("verificationScreen").classList.add("hidden");
+  document.getElementById("loadingScreen").classList.add("hidden");
+  document.getElementById("successScreen").classList.add("hidden");
+
+  const screen = document.getElementById(screenId);
+  screen.classList.remove("hidden");
+  screen.classList.remove("fade");
+  void screen.offsetWidth;
+  screen.classList.add("fade");
+}
+
+function goVerification() {
+  showOnly("verificationScreen");
+}
+
+function startLoading() {
+  seconds = 15;
+  progress = 0;
+
+  document.getElementById("bar").style.width = "0%";
+  document.getElementById("timerText").textContent = "Molimo sačekajte: 15s";
+
+  showOnly("loadingScreen");
 
   interval = setInterval(() => {
     seconds--;
@@ -294,9 +369,7 @@ function startVerification() {
 
     if (seconds <= 0) {
       clearInterval(interval);
-
-      document.getElementById("loadingScreen").classList.add("hidden");
-      document.getElementById("successScreen").classList.remove("hidden");
+      showOnly("successScreen");
     }
   }, 1000);
 }
