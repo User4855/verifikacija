@@ -1,279 +1,306 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Verifikacija u toku</title>
-  <style>
-    * { box-sizing: border-box; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Verifikacija</title>
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(245, 190, 70, 0.22), transparent 32%),
-        linear-gradient(135deg, #050505, #111111 45%, #050505);
-      color: #f5f5f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
+<style>
+* { box-sizing: border-box; }
 
-    .card {
-      width: 100%;
-      max-width: 520px;
-      background: linear-gradient(180deg, #151515, #090909);
-      border: 1px solid rgba(245, 190, 70, 0.38);
-      border-radius: 28px;
-      padding: 34px;
-      text-align: center;
-      box-shadow: 0 25px 80px rgba(0,0,0,.65);
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(245,190,70,.22), transparent 32%),
+    linear-gradient(135deg, #050505, #111111 45%, #050505);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
 
-    .badge {
-      display: inline-block;
-      padding: 14px 14px;
-      border-radius: 999px;
-      background: rgba(245,190,70,.12);
-      color: #f5be46;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .8px;
-      margin-bottom: 24px;
-    }
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(180deg, #151515, #090909);
+  border: 1px solid rgba(245,190,70,.38);
+  border-radius: 28px;
+  padding: 34px;
+  text-align: center;
+  box-shadow: 0 25px 80px rgba(0,0,0,.65);
+}
 
-    .logo {
-      width: 180px;
-      height: 30px;
-      margin: 0 auto 18px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #f5be46, #8d6416);
-      color: #090909;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: 700;
-      box-shadow: 0 12px 32px rgba(245,190,70,.25);
-    }
+.logo {
+  width: 180px;
+  height: 34px;
+  margin: 0 auto 22px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f5be46, #8d6416);
+  color: #090909;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  box-shadow: 0 12px 32px rgba(245,190,70,.25);
+}
 
-    h1 {
-      margin: 0 0 10px;
-      font-size: 30px;
-      color: #ffffff;
-    }
+h1 {
+  margin: 0 0 12px;
+  font-size: 30px;
+}
 
-    .subtitle {
-      margin: 0 auto 28px;
-      max-width: 390px;
-      color: #b9b9b9;
-      font-size: 15px;
-      line-height: 1.6;
-    }
+.subtitle {
+  margin: 0 auto 28px;
+  max-width: 390px;
+  color: #b9b9b9;
+  font-size: 15px;
+  line-height: 1.6;
+}
 
-    .status-box {
-      background: #0f0f0f;
-      border: 1px solid rgba(245,190,70,.22);
-      border-radius: 20px;
-      padding: 20px;
-      margin: 28px 0;
-      text-align: left;
-    }
+.qr-box {
+  background: #fff;
+  padding: 16px;
+  border-radius: 22px;
+  display: inline-block;
+  margin: 20px 0;
+  box-shadow: 0 16px 40px rgba(245,190,70,.18);
+}
 
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      font-size: 14px;
-    }
+.qr-box img {
+  width: 230px;
+  height: 230px;
+  display: block;
+}
 
-    .row:last-child { border-bottom: none; }
+.btn {
+  margin-top: 18px;
+  padding: 15px 34px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f5be46, #9f7219);
+  color: #090909;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(245,190,70,.24);
+}
 
-    .label { color: #898989; }
-    .value { color: #f5be46; font-weight: 800; text-align: right; }
+.status-box {
+  background: #0f0f0f;
+  border: 1px solid rgba(245,190,70,.22);
+  border-radius: 20px;
+  padding: 20px;
+  margin: 28px 0;
+  text-align: left;
+}
 
-    .loader {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      border: 5px solid rgba(245,190,70,.14);
-      border-top-color: #f5be46;
-      margin: 28px auto;
-      animation: spin 1s linear infinite;
-    }
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  font-size: 14px;
+}
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+.row:last-child { border-bottom: none; }
 
-    .progress {
-      height: 10px;
-      width: 100%;
-      background: #262626;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 18px;
-    }
+.label { color: #898989; }
+.value { color: #f5be46; font-weight: 800; text-align: right; }
 
-    .bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #8d6416, #f5be46);
-      border-radius: 999px;
-      transition: width .4s;
-    }
+.loader {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 5px solid rgba(245,190,70,.14);
+  border-top-color: #f5be46;
+  margin: 28px auto;
+  animation: spin 1s linear infinite;
+}
 
-    .qr-section {
-      display: none;
-      animation: fadeIn .7s ease forwards;
-    }
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+.progress {
+  height: 10px;
+  width: 100%;
+  background: #262626;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 18px;
+}
 
-    .qr-box {
-      background: #ffffff;
-      padding: 16px;
-      border-radius: 22px;
-      display: inline-block;
-      margin: 20px 0;
-      box-shadow: 0 16px 40px rgba(245,190,70,.18);
-    }
+.bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #8d6416, #f5be46);
+  border-radius: 999px;
+  transition: width .4s;
+}
 
-    .qr-box img {
-      width: 230px;
-      height: 230px;
-      display: block;
-    }
+.success-icon {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00d084, #00a86b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 46px;
+  font-weight: 900;
+  box-shadow: 0 18px 45px rgba(0,208,132,.25);
+}
 
-    .warning {
-      margin-top: 26px;
-      padding: 16px;
-      border-radius: 18px;
-      background: rgba(245,190,70,.10);
-      color: #f5d891;
-      font-size: 13px;
-      line-height: 1.55;
-      border: 1px solid rgba(245,190,70,.22);
-    }
+.warning {
+  margin-top: 26px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(245,190,70,.10);
+  color: #f5d891;
+  font-size: 13px;
+  line-height: 1.55;
+  border: 1px solid rgba(245,190,70,.22);
+}
 
-    .footer {
-      margin-top: 26px;
-      color: #777;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-  </style>
+.footer {
+  margin-top: 26px;
+  color: #777;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.hidden { display: none; }
+</style>
 </head>
 
 <body>
 
-  <main class="card">
-    <div class="badge"></div>
+<main class="card">
 
-    <div class="logo">Kriptomat.hr</div>
+  <div class="logo">Krypto Demo</div>
 
-    <h1 id="mainTitle">Verifikacija u toku</h1>
+  <!-- PRVI EKRAN: QR -->
+  <section id="qrScreen">
+    <h1>Vaš osobni QR kod</h1>
 
-    <p class="subtitle" id="mainText">
+    <p class="subtitle">
+      QR kod vašeg osobnog računa prikazan je ispod. Nakon skeniranja kliknite na dugme za nastavak procesa.
+    </p>
+
+    <div class="qr-box">
+      <img src="QR.png" alt="QR kod" />
+    </div>
+
+    <div class="status-box">
+      <div class="row">
+        <span class="label">QR status</span>
+        <span class="value">Generirano</span>
+      </div>
+      <div class="row">
+        <span class="label">Sesija</span>
+        <span class="value">Transakcija u toku</span>
+      </div>
+    </div>
+
+    <button class="btn" onclick="startVerification()">NASTAVI</button>
+  </section>
+
+  <!-- DRUGI EKRAN: LOADING -->
+  <section id="loadingScreen" class="hidden">
+    <h1>Verifikacija u toku</h1>
+
+    <p class="subtitle">
       Molimo pričekajte dok se obrađuje status verifikacije.
     </p>
 
-    <div id="loadingArea">
-      <div class="loader"></div>
+    <div class="loader"></div>
 
-      <div class="status-box">
-        <div class="row">
-          <span class="label">Referenca</span>
-          <span class="value">QR-48291</span>
-        </div>
-        <div class="row">
-          <span class="label">Status</span>
-          <span class="value">Obrada u toku</span>
-        </div>
-        <div class="row">
-          <span class="label">Tip provjere</span>
-          <span class="value">Deklaracija sredstava</span>
-        </div>
+    <div class="status-box">
+      <div class="row">
+        <span class="label">Referenca</span>
+        <span class="value">QR-48291</span>
       </div>
-
-      <div class="progress">
-        <div class="bar" id="bar"></div>
+      <div class="row">
+        <span class="label">Status</span>
+        <span class="value">Obrada u toku</span>
       </div>
-
-      <p class="footer" id="timerText">Preostalo vrijeme: 15s</p>
+      <div class="row">
+        <span class="label">Tip provjere</span>
+        <span class="value">Deklaracija sredstava</span>
+      </div>
     </div>
 
-    <section class="qr-section" id="qrSection">
-      <h1>Vaš osobni QR kod</h1>
-
-      <p class="subtitle">
-        QR kod vašeg osobnog računa je prikazan ispod. Ovaj QR kod koristite prilikom isplate sredstava.
-      </p>
-
-      <div class="qr-box">
-        <img
-          src="QR.png"
-          alt="QR kod"
-        />
-      </div>
-
-      <div class="status-box">
-        <div class="row">
-          <span class="label">QR status</span>
-          <span class="value">Generirano</span>
-        </div>
-        <div class="row">
-          <span class="label">Sesija</span>
-          <span class="value">Transakcija u toku</span>
-        </div>
-      </div>
-    </section>
-
-    <div class="warning">
-      <strong>Napomena:</strong> Strogo je zabranjena zloupotreba QR koda. Kod koristite isključivo prilikom podizanja sredstava sa Vaseg računa.
+    <div class="progress">
+      <div class="bar" id="bar"></div>
     </div>
 
-    <div class="footer">
-      © 2026 Kriptomat.hr
+    <p class="footer" id="timerText">Molimo sačekajte: 15s</p>
+  </section>
+
+  <!-- TREĆI EKRAN: SUCCESS -->
+  <section id="successScreen" class="hidden">
+    <div class="success-icon">✓</div>
+
+    <h1>Transakcija uspješna</h1>
+
+    <p class="subtitle">
+      Proces je uspješno završen. Status transakcije je potvrđen.
+    </p>
+
+    <div class="status-box">
+      <div class="row">
+        <span class="label">Status</span>
+        <span class="value">Uspješno</span>
+      </div>
+      <div class="row">
+        <span class="label">Referenca</span>
+        <span class="value">QR-48291</span>
+      </div>
     </div>
-  </main>
+  </section>
 
-  <script>
-    let seconds = 15;
-    let progress = 0;
+  <div class="warning">
+    <strong>Napomena:</strong> Ovo je edukativni demo prikaz i ne prikuplja stvarne podatke.
+  </div>
 
-    const timerText = document.getElementById("timerText");
-    const bar = document.getElementById("bar");
-    const loadingArea = document.getElementById("loadingArea");
-    const qrSection = document.getElementById("qrSection");
-    const mainTitle = document.getElementById("mainTitle");
-    const mainText = document.getElementById("mainText");
+  <div class="footer">
+    © 2026 Security awareness demo
+  </div>
 
-    const interval = setInterval(() => {
-      seconds--;
-      progress += 100 / 15;
+</main>
 
-      timerText.textContent = "Molimo sačekajte: " + seconds + "s";
-      bar.style.width = progress + "%";
+<script>
+let seconds = 15;
+let progress = 0;
+let interval;
 
-      if (seconds <= 0) {
-        clearInterval(interval);
+function startVerification() {
+  document.getElementById("qrScreen").classList.add("hidden");
+  document.getElementById("loadingScreen").classList.remove("hidden");
 
-        loadingArea.style.display = "none";
-        qrSection.style.display = "block";
+  interval = setInterval(() => {
+    seconds--;
+    progress += 100 / 15;
 
-        mainTitle.style.display = "none";
-        mainText.style.display = "none";
-      }
-    }, 1000);
-  </script>
+    document.getElementById("timerText").textContent = "Molimo sačekajte: " + seconds + "s";
+    document.getElementById("bar").style.width = progress + "%";
+
+    if (seconds <= 0) {
+      clearInterval(interval);
+
+      document.getElementById("loadingScreen").classList.add("hidden");
+      document.getElementById("successScreen").classList.remove("hidden");
+    }
+  }, 1000);
+}
+</script>
 
 </body>
 </html>
