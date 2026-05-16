@@ -3,150 +3,665 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AurumX Demo Trading App</title>
+<title>AurumX Global Demo Platform</title>
 
 <style>
-*{box-sizing:border-box}
-:root{
-  --gold:#f5be46;--gold2:#9f7219;--bg:#050505;--panel:#111;
-  --green:#00d084;--red:#ff5c5c;--muted:#aaa;--border:rgba(245,190,70,.28)
+* {
+  box-sizing: border-box;
 }
-body{
-  margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:#fff;
+
+:root {
+  --gold: #f5be46;
+  --gold2: #9f7219;
+  --gold3: #ffd46a;
+  --black: #040404;
+  --panel: rgba(15, 15, 15, .94);
+  --panel2: rgba(25, 25, 25, .88);
+  --border: rgba(245, 190, 70, .28);
+  --muted: #a9a9a9;
+  --text: #ffffff;
+  --green: #00d084;
+  --red: #ff5c5c;
+  --blue: #4da3ff;
+  --purple: #9b6cff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
   background:
-  radial-gradient(circle at 20% 10%,rgba(245,190,70,.25),transparent 30%),
-  radial-gradient(circle at 80% 20%,rgba(0,208,132,.08),transparent 28%),
-  linear-gradient(135deg,#020202,#111,#050505);
-  overflow-x:hidden;
+    radial-gradient(circle at 10% 8%, rgba(245,190,70,.25), transparent 28%),
+    radial-gradient(circle at 85% 18%, rgba(0,208,132,.10), transparent 26%),
+    radial-gradient(circle at 50% 100%, rgba(155,108,255,.10), transparent 32%),
+    linear-gradient(135deg, #020202, #101010 48%, #050505);
+  overflow-x: hidden;
 }
-body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;
-  background:linear-gradient(rgba(245,190,70,.035) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(245,190,70,.035) 1px,transparent 1px);
-  background-size:42px 42px;
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(245,190,70,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,190,70,.035) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black, transparent 86%);
+  z-index: -1;
 }
-.hidden{display:none!important}
-.app{max-width:1220px;margin:auto;padding:20px}
-.card{
-  background:linear-gradient(180deg,rgba(24,24,24,.96),rgba(7,7,7,.96));
-  border:1px solid var(--border);border-radius:26px;padding:24px;
-  box-shadow:0 24px 80px rgba(0,0,0,.65);position:relative;overflow:hidden
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(245,190,70,.04),
+    transparent
+  );
+  animation: scanBg 5s infinite linear;
+  z-index: -1;
 }
-.card:after{
-  content:"";position:absolute;inset:-2px;pointer-events:none;
-  background:linear-gradient(135deg,rgba(245,190,70,.18),transparent 35%,rgba(0,208,132,.06));
-  opacity:.6
+
+@keyframes scanBg {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
-.card>*{position:relative;z-index:1}
-.logo{
-  display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));
-  color:#050505;padding:12px 20px;border-radius:999px;font-weight:950;
-  box-shadow:0 12px 36px rgba(245,190,70,.25)
+
+.hidden {
+  display: none !important;
 }
-.logo-dot{width:10px;height:10px;border-radius:50%;background:#050505}
-.badge{
-  display:inline-block;padding:9px 13px;border-radius:999px;background:rgba(245,190,70,.10);
-  color:var(--gold);border:1px solid rgba(245,190,70,.25);font-size:12px;font-weight:900
+
+.app {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
 }
-h1{font-size:clamp(32px,5vw,54px);line-height:1.02;margin:14px 0}
-h2{margin-top:0;font-size:25px}
-h3{margin-top:0}
-.muted{color:var(--muted);line-height:1.6}
-.gold{color:var(--gold);font-weight:900}.green{color:var(--green);font-weight:900}.red{color:var(--red);font-weight:900}
-.btn{
-  border:0;border-radius:999px;padding:14px 22px;background:linear-gradient(135deg,var(--gold),var(--gold2));
-  color:#050505;font-weight:950;cursor:pointer;box-shadow:0 12px 30px rgba(245,190,70,.24);
-  transition:.2s
+
+.card {
+  background: linear-gradient(180deg, rgba(24,24,24,.96), rgba(7,7,7,.96));
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.65);
+  position: relative;
+  overflow: hidden;
 }
-.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
-.btn.secondary{background:rgba(255,255,255,.06);color:var(--gold);border:1px solid rgba(245,190,70,.25)}
-.btn.danger{background:rgba(255,92,92,.15);color:#ffb4b4;border:1px solid rgba(255,92,92,.25)}
-.input,select{
-  width:100%;border:1px solid rgba(245,190,70,.24);background:#070707;color:#fff;
-  padding:14px 15px;border-radius:16px;outline:none;margin:8px 0
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  border-radius: 28px;
+  background: linear-gradient(
+    135deg,
+    rgba(245,190,70,.18),
+    transparent 32%,
+    transparent 70%,
+    rgba(0,208,132,.06)
+  );
+  opacity: .7;
 }
-.input:focus,select:focus{border-color:rgba(245,190,70,.65);box-shadow:0 0 0 4px rgba(245,190,70,.08)}
-.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
-.login-card{width:100%;max-width:1040px;display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.scan-orb{
-  width:150px;height:150px;border-radius:50%;border:2px solid rgba(245,190,70,.45);
-  display:grid;place-items:center;color:var(--gold);font-size:52px;margin:26px 0;animation:pulse 1.7s infinite;position:relative
+
+.card > * {
+  position: relative;
+  z-index: 1;
 }
-.scan-orb:before{
-  content:"";position:absolute;inset:18px;border-radius:50%;border:1px dashed rgba(245,190,70,.65);animation:spin 6s linear infinite
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #050505;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 950;
+  letter-spacing: .3px;
+  box-shadow: 0 12px 36px rgba(245,190,70,.25);
 }
-@keyframes pulse{50%{box-shadow:0 0 50px rgba(245,190,70,.35)}}
-@keyframes spin{to{transform:rotate(360deg)}}
-.notice{
-  padding:15px;border-radius:18px;background:rgba(245,190,70,.1);border:1px solid rgba(245,190,70,.22);
-  color:#f8d990;font-size:13px;line-height:1.55
+
+.logo-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #050505;
+  box-shadow: 0 0 0 4px rgba(5,5,5,.18);
 }
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:14px}
-.nav{display:flex;gap:10px;flex-wrap:wrap}
-.nav button{
-  border:1px solid rgba(245,190,70,.18);background:rgba(255,255,255,.04);color:#ddd;
-  padding:10px 14px;border-radius:999px;cursor:pointer;font-weight:900
+
+.badge {
+  display: inline-block;
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: rgba(245,190,70,.10);
+  color: var(--gold);
+  border: 1px solid rgba(245,190,70,.25);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .6px;
 }
-.nav button.active{background:rgba(245,190,70,.16);color:var(--gold);border-color:rgba(245,190,70,.38)}
-.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
-.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
-.balance{font-size:clamp(36px,5vw,58px);font-weight:950;color:var(--gold);margin:12px 0}
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
-.stat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:14px}
-.stat span{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}
-.stat strong{color:var(--gold)}
-.chart{
-  height:170px;margin-top:18px;border-radius:20px;border:1px solid rgba(245,190,70,.16);
-  background:linear-gradient(to top,rgba(245,190,70,.08),transparent),
-  repeating-linear-gradient(to right,transparent,transparent 34px,rgba(255,255,255,.04) 35px),
-  repeating-linear-gradient(to top,transparent,transparent 34px,rgba(255,255,255,.035) 35px);
-  overflow:hidden
+
+h1, h2, h3 {
+  margin-top: 0;
 }
-.chart svg{width:100%;height:100%}
-.row,.tx,.market{
-  display:flex;justify-content:space-between;gap:12px;align-items:center;
-  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.065);
-  border-radius:16px;padding:13px;margin-bottom:10px;font-size:14px
+
+h1 {
+  font-size: clamp(32px, 5vw, 58px);
+  line-height: 1.02;
+  margin-bottom: 14px;
 }
-.action-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
-.modal-backdrop{
-  position:fixed;inset:0;background:rgba(0,0,0,.76);backdrop-filter:blur(10px);
-  z-index:100;display:grid;place-items:center;padding:18px
+
+h2 {
+  font-size: 25px;
+  margin-bottom: 12px;
 }
-.modal{
-  width:100%;max-width:560px;background:linear-gradient(180deg,#171717,#070707);
-  border:1px solid rgba(245,190,70,.32);border-radius:26px;padding:24px;
-  box-shadow:0 25px 90px rgba(0,0,0,.78)
+
+h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
 }
-.loader{
-  width:72px;height:72px;border-radius:50%;border:5px solid rgba(245,190,70,.14);
-  border-top-color:var(--gold);margin:24px auto;animation:spin 1s linear infinite
+
+.muted {
+  color: var(--muted);
+  line-height: 1.6;
 }
-.progress{height:10px;width:100%;background:#272727;border-radius:999px;overflow:hidden;margin-top:18px}
-.bar{height:100%;width:0;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:999px;transition:.4s}
-.success-icon{
-  width:88px;height:88px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;
-  background:linear-gradient(135deg,#00d084,#00a86b);font-size:48px;font-weight:950;
-  box-shadow:0 18px 45px rgba(0,208,132,.25)
+
+.gold { color: var(--gold); font-weight: 900; }
+.green { color: var(--green); font-weight: 900; }
+.red { color: var(--red); font-weight: 900; }
+.blue { color: var(--blue); font-weight: 900; }
+
+.btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #050505;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(245,190,70,.24);
+  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
 }
-.card-visual{
-  height:150px;border-radius:22px;padding:20px;margin:14px 0;
-  background:linear-gradient(135deg,#1d1d1d,#080808 60%,#3b2b08);
-  border:1px solid rgba(245,190,70,.35);position:relative;overflow:hidden
+
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 18px 42px rgba(245,190,70,.32);
 }
-.card-visual:before{
-  content:"";position:absolute;inset:-40px;background:radial-gradient(circle,rgba(245,190,70,.22),transparent 45%);
-  animation:float 3s infinite alternate
+
+.btn.secondary {
+  background: rgba(255,255,255,.06);
+  color: var(--gold);
+  border: 1px solid rgba(245,190,70,.25);
 }
-@keyframes float{to{transform:translate(40px,20px)}}
-.card-chip{width:46px;height:34px;border-radius:8px;background:linear-gradient(135deg,#f5be46,#7c5b15);margin-bottom:22px}
-.card-brand{position:absolute;right:20px;bottom:18px;color:var(--gold);font-weight:950}
-.qr-box{display:inline-block;background:#fff;border-radius:24px;padding:16px;box-shadow:0 18px 42px rgba(245,190,70,.20)}
-.qr-box img{width:210px;height:210px;display:block}
-@media(max-width:880px){
-  .login-card,.grid,.panel-grid{grid-template-columns:1fr}
-  .topbar{align-items:flex-start;flex-direction:column}
-  .stat-grid,.action-row{grid-template-columns:1fr}
+
+.btn.danger {
+  background: rgba(255,92,92,.15);
+  color: #ffb4b4;
+  border: 1px solid rgba(255,92,92,.25);
+}
+
+.input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid rgba(245,190,70,.24);
+  background: #070707;
+  color: #fff;
+  padding: 14px 15px;
+  border-radius: 16px;
+  outline: none;
+  margin: 8px 0;
+  font-family: inherit;
+}
+
+.input:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(245,190,70,.65);
+  box-shadow: 0 0 0 4px rgba(245,190,70,.08);
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.login-wrap {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1.08fr .92fr;
+  gap: 22px;
+}
+
+.hero-panel {
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.scan-orb {
+  width: 156px;
+  height: 156px;
+  border-radius: 50%;
+  border: 2px solid rgba(245,190,70,.45);
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  font-size: 56px;
+  margin: 26px 0;
+  animation: pulse 1.7s infinite;
+  position: relative;
+}
+
+.scan-orb::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border-radius: 50%;
+  border: 1px dashed rgba(245,190,70,.65);
+  animation: spin 6s linear infinite;
+}
+
+.scan-orb::after {
+  content: "";
+  position: absolute;
+  width: 70%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: scanLine 2.2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  50% { box-shadow: 0 0 50px rgba(245,190,70,.36); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scanLine {
+  0%, 100% { transform: translateY(-48px); opacity: .2; }
+  50% { transform: translateY(48px); opacity: 1; }
+}
+  .notice {
+  padding: 15px;
+  border-radius: 18px;
+  background: rgba(245,190,70,.10);
+  border: 1px solid rgba(245,190,70,.22);
+  color: #f8d990;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 14px;
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+}
+
+.nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nav button {
+  border: 1px solid rgba(245,190,70,.18);
+  background: rgba(255,255,255,.04);
+  color: #ddd;
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 900;
+  transition: .18s;
+}
+
+.nav button:hover,
+.nav button.active {
+  background: rgba(245,190,70,.16);
+  color: var(--gold);
+  border-color: rgba(245,190,70,.38);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: 18px;
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.three-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.balance {
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 950;
+  color: var(--gold);
+  margin: 12px 0;
+  letter-spacing: -1px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.stat {
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px;
+  padding: 14px;
+  transition: .22s;
+}
+
+.stat:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245,190,70,.32);
+}
+
+.stat span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.stat strong {
+  color: var(--gold);
+}
+
+.chart {
+  height: 190px;
+  margin-top: 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(245,190,70,.16);
+  background:
+    linear-gradient(to top, rgba(245,190,70,.08), transparent),
+    repeating-linear-gradient(to right, transparent, transparent 34px, rgba(255,255,255,.04) 35px),
+    repeating-linear-gradient(to top, transparent, transparent 34px, rgba(255,255,255,.035) 35px);
+  position: relative;
+  overflow: hidden;
+}
+
+.chart::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(245,190,70,.10), transparent);
+  animation: scanBg 3.8s infinite linear;
+}
+
+.chart svg {
+  width: 100%;
+  height: 100%;
+}
+
+.row,
+.tx,
+.market,
+.device,
+.asset-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.065);
+  border-radius: 16px;
+  padding: 13px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.asset-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.asset-left small {
+  color: var(--muted);
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.kpi-pill {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.07);
+  color: #ddd;
+  font-size: 12px;
+}
+
+.quickbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.76);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 620px;
+  background: linear-gradient(180deg,#171717,#070707);
+  border: 1px solid rgba(245,190,70,.32);
+  border-radius: 26px;
+  padding: 24px;
+  box-shadow: 0 25px 90px rgba(0,0,0,.78);
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.loader {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 5px solid rgba(245,190,70,.14);
+  border-top-color: var(--gold);
+  margin: 24px auto;
+  animation: spin 1s linear infinite;
+}
+
+.progress {
+  height: 10px;
+  width: 100%;
+  background: #272727;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 18px;
+}
+
+.bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg,var(--gold2),var(--gold));
+  border-radius: 999px;
+  transition: .4s;
+}
+
+.success-icon {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg,#00d084,#00a86b);
+  font-size: 50px;
+  font-weight: 950;
+  box-shadow: 0 18px 45px rgba(0,208,132,.25);
+}
+
+.card-visual {
+  height: 155px;
+  border-radius: 22px;
+  padding: 20px;
+  margin: 14px 0;
+  background: linear-gradient(135deg,#1d1d1d,#080808 60%,#3b2b08);
+  border: 1px solid rgba(245,190,70,.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-visual::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(circle,rgba(245,190,70,.22),transparent 45%);
+  animation: float 3s infinite alternate;
+}
+
+@keyframes float {
+  to { transform: translate(40px,20px); }
+}
+
+.card-chip {
+  width: 46px;
+  height: 34px;
+  border-radius: 8px;
+  background: linear-gradient(135deg,#f5be46,#7c5b15);
+  margin-bottom: 22px;
+}
+
+.card-brand {
+  position: absolute;
+  right: 20px;
+  bottom: 18px;
+  color: var(--gold);
+  font-weight: 950;
+}
+
+.qr-box {
+  display: inline-block;
+  background: #fff;
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 18px 42px rgba(245,190,70,.20);
+}
+
+.qr-box img {
+  width: 210px;
+  height: 210px;
+  display: block;
+}
+
+.profile-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 26px;
+  background: linear-gradient(135deg,var(--gold),var(--gold2));
+  color: #050505;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  font-weight: 950;
+  box-shadow: 0 16px 42px rgba(245,190,70,.24);
+}
+
+.timeline {
+  display: grid;
+  gap: 12px;
+}
+
+.timeline-item {
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.07);
+  background: rgba(255,255,255,.035);
+}
+
+.terminal {
+  background: #030303;
+  border: 1px solid rgba(0,208,132,.22);
+  color: #00d084;
+  font-family: monospace;
+  border-radius: 18px;
+  padding: 16px;
+  line-height: 1.65;
+  min-height: 130px;
+}
+
+@media (max-width: 940px) {
+  .login-card,
+  .grid,
+  .panel-grid,
+  .three-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    position: static;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .stat-grid,
+  .action-row {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-panel {
+    min-height: auto;
+  }
 }
 </style>
 </head>
@@ -155,52 +670,94 @@ h3{margin-top:0}
 
 <div id="loginScreen" class="login-wrap">
   <div class="login-card">
-    <section class="card">
-      <div class="logo"><span class="logo-dot"></span>AurumX</div>
-      <br><br>
-      <span class="badge">EDUKATIVNI CYBER TRADING DEMO</span>
-      <h1>Futuristička simulacija trading računa.</h1>
-      <p class="muted">Demo aplikacija za školski anti-phishing projekat. Nema stvarnog logina, nema čuvanja podataka i nema pravih transakcija.</p>
-      <div class="scan-orb">◎</div>
+
+    <section class="card hero-panel">
+      <div>
+        <div class="logo"><span class="logo-dot"></span>AurumX</div>
+        <br><br>
+        <span class="badge">EDUKATIVNI GLOBAL TRADING DEMO</span>
+        <h1>Jedna platforma za crypto, zlato, naftu i digitalnu imovinu.</h1>
+        <p class="muted">
+          Futuristička demo platforma za školski anti-phishing projekat.
+          Svi podaci, korisnici, salda i transakcije su simulirani.
+        </p>
+      </div>
+
+      <div>
+        <div class="scan-orb">◎</div>
+        <div class="quickbar">
+          <span class="kpi-pill">Crypto</span>
+          <span class="kpi-pill">Gold</span>
+          <span class="kpi-pill">Oil</span>
+          <span class="kpi-pill">KYC</span>
+          <span class="kpi-pill">Wallet</span>
+        </div>
+      </div>
     </section>
 
     <section class="card">
       <h2>Demo pristup</h2>
-      <p class="muted">Polja su samo vizualni prikaz. Klik otvara demo dashboard.</p>
-      <input class="input" placeholder="Demo korisnik">
+      <p class="muted">
+        Polja su vizualni prikaz. Klik otvara demo dashboard bez stvarnog slanja podataka.
+      </p>
+
+      <input class="input" id="loginName" placeholder="Demo korisnik">
       <input class="input" placeholder="Demo lozinka" type="password">
+
       <button class="btn" onclick="enterApp()">Uđi u demo račun</button>
+
       <br><br>
-      <div class="notice"><strong>Sigurnosna napomena:</strong> Nikada ne unosite stvarne lozinke, PIN kodove, podatke o kartici ili osobne dokumente na neprovjerenim stranicama.</div>
+
+      <div class="notice">
+        <strong>Sigurnosna napomena:</strong>
+        Nikada ne unosite stvarne lozinke, PIN kodove, podatke o kartici,
+        osobne dokumente ili recovery phrase na neprovjerenim stranicama.
+      </div>
     </section>
+
   </div>
 </div>
 
 <div id="appScreen" class="app hidden">
+
   <div class="topbar">
     <div class="logo"><span class="logo-dot"></span>AurumX</div>
+
     <div class="nav">
-      <button class="active" onclick="showTab('home',this)">Dashboard</button>
-      <button onclick="showTab('kyc',this)">KYC centar</button>
+      <button class="active" onclick="showTab('home',this)">Platforma</button>
+      <button onclick="showTab('markets',this)">Tržišta</button>
       <button onclick="showTab('wallet',this)">Novčanik</button>
+      <button onclick="showTab('kyc',this)">KYC</button>
+      <button onclick="showTab('account',this)">Račun</button>
       <button onclick="showTab('security',this)">Sigurnost</button>
+      <button onclick="showTab('support',this)">Kontakt</button>
     </div>
   </div>
-  <!-- HOME -->
+  <!-- HOME / PLATFORM -->
 <div id="tab-home">
 
   <div class="grid">
 
     <section class="card">
-      <span class="badge">LIVE DEMO MARKET</span>
+
+      <span class="badge">GLOBAL DEMO PORTFOLIO</span>
 
       <h2>Ukupan saldo</h2>
 
-      <div class="balance" id="balanceText">€ 124,820.42</div>
+      <div class="balance" id="balanceText">
+        € 124,820.42
+      </div>
 
       <p class="muted">
-        Simulirani portfolio i tržišni podaci.
+        Simulirani portfolio i tržišni podaci povezani s demo market feedom.
       </p>
+
+      <div class="quickbar">
+        <span class="kpi-pill">BTC +2.14%</span>
+        <span class="kpi-pill">GOLD +1.02%</span>
+        <span class="kpi-pill">OIL -0.41%</span>
+        <span class="kpi-pill">NASDAQ +0.82%</span>
+      </div>
 
       <div class="stat-grid">
 
@@ -223,6 +780,7 @@ h3{margin-top:0}
 
       <div class="chart">
         <svg viewBox="0 0 600 180" preserveAspectRatio="none">
+
           <polyline
             fill="none"
             stroke="#f5be46"
@@ -246,63 +804,75 @@ h3{margin-top:0}
               600,10
             "
           />
+
         </svg>
       </div>
 
       <div class="action-row">
         <button class="btn" onclick="openDeposit()">Uplata</button>
         <button class="btn secondary" onclick="openWithdraw()">Povlačenje</button>
-        <button class="btn secondary" onclick="openVerification()">Verifikacija</button>
+        <button class="btn secondary" onclick="openVerification()">KYC</button>
+        <button class="btn secondary" onclick="openTrade()">Trade</button>
       </div>
 
     </section>
 
     <section class="card">
 
-      <h2>Tržište</h2>
+      <h2>Live tržište</h2>
 
       <div class="market">
         <span>BTC / EUR</span>
-        <strong class="green">+2.14%</strong>
+        <strong class="green" id="btcPrice">€ 104,200</strong>
       </div>
 
       <div class="market">
         <span>ETH / EUR</span>
-        <strong class="green">+1.32%</strong>
+        <strong class="green" id="ethPrice">€ 4,280</strong>
       </div>
 
       <div class="market">
-        <span>SOL / EUR</span>
-        <strong class="red">-0.41%</strong>
+        <span>Gold / oz</span>
+        <strong class="green">€ 2,420</strong>
       </div>
 
       <div class="market">
-        <span>XRP / EUR</span>
-        <strong class="green">+4.11%</strong>
+        <span>Oil / barrel</span>
+        <strong class="red">€ 82.10</strong>
       </div>
 
       <div class="market">
-        <span>ADA / EUR</span>
-        <strong class="green">+0.92%</strong>
+        <span>NASDAQ</span>
+        <strong class="green">+0.82%</strong>
+      </div>
+
+      <div class="market">
+        <span>EUR / USD</span>
+        <strong class="green">1.08</strong>
       </div>
 
       <br>
 
       <h3>Status računa</h3>
 
-      <div class="market">
+      <div class="row">
         <span>KYC status</span>
         <strong class="gold">Potrebna provjera</strong>
       </div>
 
-      <div class="market">
+      <div class="row">
         <span>Biometric status</span>
         <strong class="green">Aktivno</strong>
       </div>
 
-      <div class="market">
+      <div class="row">
         <span>Sigurnosni nivo</span>
         <strong class="green">Visok</strong>
+      </div>
+
+      <div class="row">
+        <span>Anti-phishing kod</span>
+        <strong class="green">Postavljen</strong>
       </div>
 
     </section>
@@ -312,6 +882,7 @@ h3{margin-top:0}
   <div class="panel-grid">
 
     <section class="card">
+
       <h2>Transakcije</h2>
 
       <div id="txContainer">
@@ -326,7 +897,18 @@ h3{margin-top:0}
           <strong class="green">Završeno</strong>
         </div>
 
+        <div class="tx">
+          <span>KYC pregled</span>
+          <strong class="red">Potrebno</strong>
+        </div>
+
+        <div class="tx">
+          <span>Gold asset purchase</span>
+          <strong class="green">Završeno</strong>
+        </div>
+
       </div>
+
     </section>
 
     <section class="card">
@@ -334,15 +916,356 @@ h3{margin-top:0}
       <h2>QR pristup</h2>
 
       <p class="muted">
-        Demo QR kod za simulirani pristup računu.
+        Demo QR kod za simulirani pristup računu i sigurnosni login.
       </p>
 
       <div style="text-align:center;margin-top:20px">
 
         <div class="qr-box">
-          <img src="QR.png">
+          <img src="QR.png" alt="QR kod">
         </div>
 
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="three-grid">
+
+    <section class="card">
+
+      <h2>Najaktivniji asseti</h2>
+
+      <div class="asset-row">
+        <div class="asset-left">
+          <strong>Bitcoin</strong>
+          <small>BTC</small>
+        </div>
+
+        <strong class="green">+2.14%</strong>
+      </div>
+
+      <div class="asset-row">
+        <div class="asset-left">
+          <strong>Ethereum</strong>
+          <small>ETH</small>
+        </div>
+
+        <strong class="green">+1.08%</strong>
+      </div>
+
+      <div class="asset-row">
+        <div class="asset-left">
+          <strong>Gold</strong>
+          <small>XAU</small>
+        </div>
+
+        <strong class="green">+0.82%</strong>
+      </div>
+
+      <div class="asset-row">
+        <div class="asset-left">
+          <strong>Crude Oil</strong>
+          <small>OIL</small>
+        </div>
+
+        <strong class="red">-0.41%</strong>
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h2>Automatizirani trading</h2>
+
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <strong>AI market scan</strong>
+          <div class="muted">
+            Analiza tržišta uspješno završena.
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <strong>Portfolio balancing</strong>
+          <div class="muted">
+            Simulirana redistribucija sredstava.
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <strong>Liquidity monitor</strong>
+          <div class="muted">
+            Market volatility detected.
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h2>Sistem log</h2>
+
+      <div class="terminal">
+> AurumX secure node initialized<br>
+> Biometric layer active<br>
+> Portfolio sync completed<br>
+> Trading engine connected<br>
+> Market scanner active<br>
+> Security firewall operational<br>
+> KYC queue pending verification<br>
+      </div>
+
+    </section>
+
+  </div>
+
+</div>
+
+<!-- MARKETS -->
+<div id="tab-markets" class="hidden">
+
+  <section class="card">
+
+    <span class="badge">GLOBAL MARKETS</span>
+
+    <h2>Pregled tržišta</h2>
+
+    <p class="muted">
+      Simulirani pregled kripto, forex, commodity i stock tržišta.
+    </p>
+
+    <div class="three-grid">
+
+      <div class="card">
+
+        <h3>Crypto</h3>
+
+        <div class="market">
+          <span>BTC</span>
+          <strong class="green">€ 104,200</strong>
+        </div>
+
+        <div class="market">
+          <span>ETH</span>
+          <strong class="green">€ 4,280</strong>
+        </div>
+
+        <div class="market">
+          <span>SOL</span>
+          <strong class="red">€ 182</strong>
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <h3>Commodities</h3>
+
+        <div class="market">
+          <span>Gold</span>
+          <strong class="green">€ 2,420</strong>
+        </div>
+
+        <div class="market">
+          <span>Silver</span>
+          <strong class="green">€ 32</strong>
+        </div>
+
+        <div class="market">
+          <span>Oil</span>
+          <strong class="red">€ 82</strong>
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <h3>Forex</h3>
+
+        <div class="market">
+          <span>EUR/USD</span>
+          <strong class="green">1.08</strong>
+        </div>
+
+        <div class="market">
+          <span>GBP/USD</span>
+          <strong class="green">1.27</strong>
+        </div>
+
+        <div class="market">
+          <span>USD/JPY</span>
+          <strong class="red">151.2</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+<!-- WALLET -->
+<div id="tab-wallet" class="hidden">
+
+  <div class="grid">
+
+    <section class="card">
+
+      <span class="badge">WALLET CENTER</span>
+
+      <h2>Novčanik</h2>
+
+      <p class="muted">
+        Pregled demo imovine, stanja i simuliranih finansijskih operacija.
+      </p>
+
+      <div class="stat-grid">
+
+        <div class="stat">
+          <span>BTC</span>
+          <strong>1.842 BTC</strong>
+        </div>
+
+        <div class="stat">
+          <span>ETH</span>
+          <strong>18.24 ETH</strong>
+        </div>
+
+        <div class="stat">
+          <span>USDT</span>
+          <strong>48,200 USDT</strong>
+        </div>
+
+      </div>
+
+      <br>
+
+      <div class="stat-grid">
+
+        <div class="stat">
+          <span>Gold</span>
+          <strong>18.5 oz</strong>
+        </div>
+
+        <div class="stat">
+          <span>Oil index</span>
+          <strong>240 units</strong>
+        </div>
+
+        <div class="stat">
+          <span>Cash EUR</span>
+          <strong id="walletCash">€ 82,120</strong>
+        </div>
+
+      </div>
+
+      <div class="action-row">
+        <button class="btn" onclick="openDeposit()">Uplata</button>
+        <button class="btn secondary" onclick="openWithdraw()">Povlačenje</button>
+        <button class="btn secondary" onclick="openTrade()">Trade</button>
+        <button class="btn secondary" onclick="openTransfer()">Transfer</button>
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h2>Asset raspodjela</h2>
+
+      <div class="asset-row">
+        <div class="asset-left">
+          <strong>Crypto portfolio</strong>
+          <small>BTC, ETH, SOL, USDT</small>
+        </div>
+
+        <strong class="gold">54%</strong>
+      </div>
+
+      <div class="asset-row">
+        <div class="asset-left">
+          <strong>Commodities</strong>
+          <small>Gold, oil, silver</small>
+        </div>
+
+        <strong class="gold">26%</strong>
+      </div>
+
+      <div class="asset-row">
+        <div class="asset-left">
+          <strong>Cash balance</strong>
+          <small>EUR account</small>
+        </div>
+
+        <strong class="gold">20%</strong>
+      </div>
+
+      <br>
+
+      <h3>Risk profile</h3>
+
+      <div class="market">
+        <span>Rizik portfolija</span>
+        <strong class="gold">Srednje visok</strong>
+      </div>
+
+      <div class="market">
+        <span>Likvidnost</span>
+        <strong class="green">Visoka</strong>
+      </div>
+
+      <div class="market">
+        <span>Exposure alert</span>
+        <strong class="green">Uredno</strong>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="panel-grid">
+
+    <section class="card">
+
+      <h2>Novčanik aktivnosti</h2>
+
+      <div id="walletActivity">
+
+        <div class="tx">
+          <span>USDT depozit</span>
+          <strong class="green">Završeno</strong>
+        </div>
+
+        <div class="tx">
+          <span>BTC isplata</span>
+          <strong class="gold">Na čekanju</strong>
+        </div>
+
+        <div class="tx">
+          <span>Gold allocation</span>
+          <strong class="green">Završeno</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h2>Brzi QR pristup</h2>
+
+      <p class="muted">
+        Demo QR kod za pristup novčaniku i sigurnosnu provjeru.
+      </p>
+
+      <div style="text-align:center;margin-top:18px">
+        <div class="qr-box">
+          <img src="QR.png" alt="QR kod">
+        </div>
       </div>
 
     </section>
@@ -354,92 +1277,531 @@ h3{margin-top:0}
 <!-- KYC -->
 <div id="tab-kyc" class="hidden">
 
-  <section class="card">
+  <div class="grid">
 
-    <span class="badge">KYC CENTER</span>
+    <section class="card">
 
-    <h2>Centar za verifikaciju</h2>
+      <span class="badge">KYC CENTER</span>
 
-    <div class="row">
-      <span>Osnovni profil</span>
-      <strong class="green">Dovršeno</strong>
-    </div>
+      <h2>Centar za verifikaciju</h2>
 
-    <div class="row">
-      <span>Biometrijska provjera</span>
-      <strong class="green">Aktivno</strong>
-    </div>
+      <p class="muted">
+        Edukativni prikaz verifikacijskog toka. Ne učitavaju se stvarni dokumenti i ne spremaju se osobni podaci.
+      </p>
 
-    <div class="row">
-      <span>Deklaracija sredstava</span>
-      <strong class="gold">Potrebno</strong>
-    </div>
+      <div class="row">
+        <span>Osnovni profil</span>
+        <strong class="green">Dovršeno</strong>
+      </div>
 
-    <br>
+      <div class="row">
+        <span>Biometrijska provjera</span>
+        <strong class="green">Aktivno</strong>
+      </div>
 
-    <button class="btn" onclick="openVerification()">
-      Pokreni demo verifikaciju
-    </button>
+      <div class="row">
+        <span>Deklaracija sredstava</span>
+        <strong class="gold">Potrebno</strong>
+      </div>
 
-  </section>
+      <div class="row">
+        <span>AML screening</span>
+        <strong class="gold">U obradi</strong>
+      </div>
+
+      <div class="row">
+        <span>Risk scoring</span>
+        <strong class="green">Nizak rizik</strong>
+      </div>
+
+      <br>
+
+      <button class="btn" onclick="openVerification()">
+        Pokreni demo verifikaciju
+      </button>
+
+    </section>
+
+    <section class="card">
+
+      <h2>Biometric layer</h2>
+
+      <p class="muted">
+        Simulacija biometrijske sigurnosti i potvrde identiteta.
+      </p>
+
+      <div class="scan-orb" style="margin:22px auto">
+        ◎
+      </div>
+
+      <div class="terminal">
+> Face layer: simulated<br>
+> Document scan: disabled for safety<br>
+> Liveness check: demo mode<br>
+> Risk engine: active<br>
+> Compliance status: pending<br>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="three-grid">
+
+    <section class="card">
+
+      <h3>Dokument provjera</h3>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <strong>Identitet</strong>
+          <div class="muted">Demo status: pripremljeno</div>
+        </div>
+
+        <div class="timeline-item">
+          <strong>Adresa</strong>
+          <div class="muted">Demo status: nije potrebno</div>
+        </div>
+
+        <div class="timeline-item">
+          <strong>Deklaracija sredstava</strong>
+          <div class="muted">Demo status: čeka potvrdu</div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h3>Sigurnosna pravila</h3>
+
+      <div class="notice">
+        Nikada ne šaljite osobne dokumente, lozinke, PIN kodove ili podatke o kartici putem neprovjerenih linkova.
+      </div>
+
+      <br>
+
+      <div class="notice">
+        Za svaku pomoć koristite isključivo službene i provjerene kanale tehničke podrške.
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h3>KYC timeline</h3>
+
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <strong>01 — Profil kreiran</strong>
+          <div class="muted">Demo korisnik uspješno dodan.</div>
+        </div>
+
+        <div class="timeline-item">
+          <strong>02 — Provjera računa</strong>
+          <div class="muted">Sigurnosni status generiran.</div>
+        </div>
+
+        <div class="timeline-item">
+          <strong>03 — Završna potvrda</strong>
+          <div class="muted">Čeka demo potvrdu korisnika.</div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
 
 </div>
 
-<!-- WALLET -->
-<div id="tab-wallet" class="hidden">
+<!-- ACCOUNT -->
+<div id="tab-account" class="hidden">
 
-  <section class="card">
+  <div class="grid">
 
-    <h2>Novčanik</h2>
+    <section class="card">
 
-    <div class="stat-grid">
+      <span class="badge">ACCOUNT CENTER</span>
 
-      <div class="stat">
-        <span>BTC</span>
-        <strong>1.842 BTC</strong>
+      <h2>Moj račun</h2>
+
+      <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:18px 0">
+        <div class="profile-avatar" id="avatarBox">A</div>
+
+        <div>
+          <h3 id="profileNameText" style="margin:0">Demo Korisnik</h3>
+          <p class="muted" style="margin:6px 0">AurumX ID: AX-48291-DEMO</p>
+          <span class="kpi-pill">Premium demo account</span>
+        </div>
       </div>
 
-      <div class="stat">
-        <span>ETH</span>
-        <strong>18.24 ETH</strong>
+      <input class="input" id="profileName" placeholder="Ime i prezime">
+      <input class="input" id="profileEmail" placeholder="E-mail adresa">
+      <input class="input" id="profileCountry" placeholder="Država">
+
+      <button class="btn" onclick="saveProfile()">
+        Spremi demo podatke
+      </button>
+
+    </section>
+
+    <section class="card">
+
+      <h2>Postavke računa</h2>
+
+      <div class="row">
+        <span>Jezik</span>
+        <strong class="gold">Hrvatski</strong>
       </div>
 
-      <div class="stat">
-        <span>USDT</span>
-        <strong>48,200 USDT</strong>
+      <div class="row">
+        <span>Valuta</span>
+        <strong class="gold">EUR</strong>
       </div>
 
-    </div>
+      <div class="row">
+        <span>Tip računa</span>
+        <strong class="green">Demo</strong>
+      </div>
 
-  </section>
+      <div class="row">
+        <span>Obavijesti</span>
+        <strong class="green">Aktivne</strong>
+      </div>
+
+      <br>
+
+      <button class="btn secondary" onclick="openModalMessage('Postavke spremljene','Demo postavke računa su ažurirane.')">
+        Spremi postavke
+      </button>
+
+    </section>
+
+  </div>
 
 </div>
-
 <!-- SECURITY -->
 <div id="tab-security" class="hidden">
 
-  <section class="card">
+  <div class="grid">
 
-    <h2>Sigurnosni centar</h2>
+    <section class="card">
 
-    <div class="tx">
-      <span>2FA autentifikacija</span>
-      <strong class="green">Aktivno</strong>
-    </div>
+      <span class="badge">SECURITY CENTER</span>
 
-    <div class="tx">
-      <span>Biometric zaštita</span>
-      <strong class="green">Aktivno</strong>
-    </div>
+      <h2>Sigurnosni centar</h2>
 
-    <div class="tx">
-      <span>Anti-phishing kod</span>
-      <strong class="gold">Postavljeno</strong>
-    </div>
+      <p class="muted">
+        Napredni demo sigurnosni sustav za zaštitu računa i transakcija.
+      </p>
 
-  </section>
+      <div class="row">
+        <span>2FA autentifikacija</span>
+        <strong class="green">Aktivno</strong>
+      </div>
+
+      <div class="row">
+        <span>Biometric zaštita</span>
+        <strong class="green">Aktivno</strong>
+      </div>
+
+      <div class="row">
+        <span>Anti-phishing kod</span>
+        <strong class="gold">Postavljen</strong>
+      </div>
+
+      <div class="row">
+        <span>AI risk monitoring</span>
+        <strong class="green">Aktivno</strong>
+      </div>
+
+      <div class="row">
+        <span>Session encryption</span>
+        <strong class="green">256-bit</strong>
+      </div>
+
+      <br>
+
+      <div class="action-row">
+        <button class="btn" onclick="openModalMessage('2FA aktiviran','Demo 2FA zaštita uspješno je omogućena.')">
+          Aktiviraj 2FA
+        </button>
+
+        <button class="btn secondary" onclick="openModalMessage('Biometric scan','Biometric layer uspješno je sinkroniziran.')">
+          Biometric
+        </button>
+
+        <button class="btn secondary" onclick="openModalMessage('Firewall scan','Nisu pronađene sigurnosne prijetnje.')">
+          Firewall scan
+        </button>
+
+        <button class="btn secondary" onclick="openModalMessage('Session refresh','Sigurnosna sesija je obnovljena.')">
+          Refresh session
+        </button>
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h2>Aktivni uređaji</h2>
+
+      <div class="device">
+        <div>
+          <strong>Windows Desktop</strong>
+          <div class="muted">Chrome • Srbija</div>
+        </div>
+
+        <strong class="green">Aktivno</strong>
+      </div>
+
+      <div class="device">
+        <div>
+          <strong>iPhone Mobile</strong>
+          <div class="muted">Safari • Hrvatska</div>
+        </div>
+
+        <strong class="gold">Nedavno aktivno</strong>
+      </div>
+
+      <div class="device">
+        <div>
+          <strong>Tablet Session</strong>
+          <div class="muted">Android • Demo session</div>
+        </div>
+
+        <strong class="red">Isteklo</strong>
+      </div>
+
+      <br>
+
+      <button class="btn danger" onclick="openModalMessage('Sesije zatvorene','Sve demo sesije uspješno su odjavljene.')">
+        Odjavi sve uređaje
+      </button>
+
+    </section>
+
+  </div>
+
+  <div class="panel-grid">
+
+    <section class="card">
+
+      <h2>Security log</h2>
+
+      <div class="terminal">
+> Security node initialized<br>
+> Session firewall active<br>
+> Device recognition synced<br>
+> Suspicious activity monitor enabled<br>
+> AI anomaly scan completed<br>
+> Network encryption verified<br>
+> Login shield active<br>
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h2>Sigurnosna povijest</h2>
+
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <strong>Nova prijava</strong>
+          <div class="muted">
+            Desktop uređaj uspješno prepoznat.
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <strong>2FA sinkronizacija</strong>
+          <div class="muted">
+            Demo autentifikacija potvrđena.
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <strong>Firewall scan</strong>
+          <div class="muted">
+            Nisu pronađene prijetnje.
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
 
 </div>
+
+<!-- SUPPORT -->
+<div id="tab-support" class="hidden">
+
+  <div class="grid">
+
+    <section class="card">
+
+      <span class="badge">SUPPORT CENTER</span>
+
+      <h2>Kontakt i podrška</h2>
+
+      <p class="muted">
+        Simulirani support centar i ticket sustav za demo platformu.
+      </p>
+
+      <input class="input" id="ticketSubject" placeholder="Naslov zahtjeva">
+
+      <select id="ticketType">
+        <option>Tehnička podrška</option>
+        <option>Problem s računom</option>
+        <option>KYC verifikacija</option>
+        <option>Sigurnosni upit</option>
+        <option>Uplata / isplata</option>
+      </select>
+
+      <textarea id="ticketMessage" placeholder="Opišite problem ili zahtjev"></textarea>
+
+      <button class="btn" onclick="sendTicket()">
+        Pošalji demo zahtjev
+      </button>
+
+      <br><br>
+
+      <div class="notice">
+        Za svu pomoć koristite isključivo službene i provjerene kanale tehničke podrške.
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h2>Status podrške</h2>
+
+      <div class="row">
+        <span>Online agenti</span>
+        <strong class="green">12 aktivno</strong>
+      </div>
+
+      <div class="row">
+        <span>Vrijeme odgovora</span>
+        <strong class="gold">~2 min</strong>
+      </div>
+
+      <div class="row">
+        <span>Status sustava</span>
+        <strong class="green">Operativno</strong>
+      </div>
+
+      <div class="row">
+        <span>Prioritet računa</span>
+        <strong class="gold">Premium demo</strong>
+      </div>
+
+      <br>
+
+      <h3>Nedavni zahtjevi</h3>
+
+      <div id="ticketContainer">
+
+        <div class="tx">
+          <span>KYC verifikacija</span>
+          <strong class="gold">U obradi</strong>
+        </div>
+
+        <div class="tx">
+          <span>Problem s loginom</span>
+          <strong class="green">Riješeno</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="three-grid">
+
+    <section class="card">
+
+      <h3>FAQ</h3>
+
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <strong>Kako funkcionira demo račun?</strong>
+          <div class="muted">
+            Demo račun prikazuje simulirane podatke i tržišta.
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <strong>Jesu li podaci stvarni?</strong>
+          <div class="muted">
+            Ne. Platforma je edukativna simulacija.
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <strong>Kako kontaktirati podršku?</strong>
+          <div class="muted">
+            Putem službenih i verificiranih kanala.
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h3>Globalni status mreže</h3>
+
+      <div class="market">
+        <span>Europe node</span>
+        <strong class="green">Online</strong>
+      </div>
+
+      <div class="market">
+        <span>US node</span>
+        <strong class="green">Online</strong>
+      </div>
+
+      <div class="market">
+        <span>Asia node</span>
+        <strong class="green">Online</strong>
+      </div>
+
+      <div class="market">
+        <span>Latency monitor</span>
+        <strong class="gold">28ms</strong>
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h3>AI assistant</h3>
+
+      <div class="terminal">
+> Welcome to AurumX support node<br>
+> AI assistant online<br>
+> Security verification completed<br>
+> Waiting for support request...<br>
+      </div>
+
+      <br>
+
+      <button class="btn secondary" onclick="openModalMessage('AI Assistant','Virtualni pomoćnik uspješno je pokrenut.')">
+        Pokreni AI asistenta
+      </button>
+
+    </section>
+
+  </div>
 
 </div>
 
@@ -454,19 +1816,30 @@ h3{margin-top:0}
       <h2>Uplata sredstava</h2>
 
       <div class="card-visual">
+
         <div class="card-chip"></div>
+
         <div style="font-size:22px;font-weight:900;margin-top:20px">
           •••• •••• •••• 4829
         </div>
+
         <div style="margin-top:12px;color:#ddd">
           VISA / MASTERCARD
         </div>
-        <div class="card-brand">AurumX Pay</div>
+
+        <div class="card-brand">
+          AurumX Pay
+        </div>
+
       </div>
 
       <input class="input" id="depositAmount" placeholder="Iznos u EUR">
+
       <input class="input" placeholder="DEMO broj kartice">
+
       <input class="input" placeholder="DEMO ime vlasnika">
+
+      <input class="input" placeholder="MM / YY">
 
       <button class="btn" onclick="confirmDeposit()">
         Potvrdi uplatu
@@ -480,12 +1853,67 @@ h3{margin-top:0}
       <h2>Povlačenje sredstava</h2>
 
       <input class="input" placeholder="Ime">
+
       <input class="input" placeholder="Prezime">
+
       <input class="input" placeholder="Broj osobne iskaznice">
+
+      <input class="input" placeholder="IBAN">
+
       <input class="input" id="withdrawAmount" placeholder="Iznos za povlačenje">
 
       <button class="btn danger" onclick="confirmWithdraw()">
         Pokreni isplatu
+      </button>
+
+    </div>
+        <!-- TRADE -->
+    <div id="tradeModal" class="hidden">
+
+      <h2>Trading terminal</h2>
+
+      <p class="muted">
+        Simulirani trading engine za demo platformu.
+      </p>
+
+      <select id="tradeAsset">
+        <option>BTC / EUR</option>
+        <option>ETH / EUR</option>
+        <option>Gold / XAU</option>
+        <option>Oil / Barrel</option>
+        <option>NASDAQ</option>
+      </select>
+
+      <select id="tradeType">
+        <option>Kupnja</option>
+        <option>Prodaja</option>
+      </select>
+
+      <input class="input" id="tradeAmount" placeholder="Iznos trade operacije">
+
+      <button class="btn" onclick="confirmTrade()">
+        Pokreni trade
+      </button>
+
+    </div>
+
+    <!-- TRANSFER -->
+    <div id="transferModal" class="hidden">
+
+      <h2>Interni transfer</h2>
+
+      <p class="muted">
+        Simulirani interni prijenos sredstava između demo računa.
+      </p>
+
+      <input class="input" placeholder="Primatelj">
+
+      <input class="input" placeholder="AurumX ID">
+
+      <input class="input" id="transferAmount" placeholder="Iznos transfera">
+
+      <button class="btn" onclick="confirmTransfer()">
+        Potvrdi transfer
       </button>
 
     </div>
@@ -516,7 +1944,9 @@ h3{margin-top:0}
 
       <div class="success-icon">✓</div>
 
-      <h2 id="successTitle">Proces uspješan</h2>
+      <h2 id="successTitle">
+        Operacija uspješna
+      </h2>
 
       <p class="muted" id="successText">
         Operacija je uspješno završena.
@@ -548,51 +1978,128 @@ function updateUI() {
 
   document.getElementById("holdText").innerText =
     "€ " + hold.toLocaleString();
+
+  let walletCash =
+    document.getElementById("walletCash");
+
+  if(walletCash) {
+    walletCash.innerText =
+      "€ " + available.toLocaleString();
+  }
 }
 
 function enterApp() {
-  document.getElementById("loginScreen").classList.add("hidden");
-  document.getElementById("appScreen").classList.remove("hidden");
+
+  let name =
+    document.getElementById("loginName").value;
+
+  if(name.trim() !== "") {
+
+    document.getElementById("profileNameText")
+      .innerText = name;
+
+    document.getElementById("avatarBox")
+      .innerText = name.charAt(0).toUpperCase();
+
+  }
+
+  document.getElementById("loginScreen")
+    .classList.add("hidden");
+
+  document.getElementById("appScreen")
+    .classList.remove("hidden");
 }
 
 function showTab(tab, btn) {
 
-  document.getElementById("tab-home").classList.add("hidden");
-  document.getElementById("tab-kyc").classList.add("hidden");
-  document.getElementById("tab-wallet").classList.add("hidden");
-  document.getElementById("tab-security").classList.add("hidden");
+  const tabs = [
+    "home",
+    "markets",
+    "wallet",
+    "kyc",
+    "account",
+    "security",
+    "support"
+  ];
 
-  document.getElementById("tab-" + tab).classList.remove("hidden");
-
-  document.querySelectorAll(".nav button").forEach(b => {
-    b.classList.remove("active");
+  tabs.forEach(t => {
+    document.getElementById("tab-" + t)
+      .classList.add("hidden");
   });
+
+  document.getElementById("tab-" + tab)
+    .classList.remove("hidden");
+
+  document.querySelectorAll(".nav button")
+    .forEach(b => b.classList.remove("active"));
 
   btn.classList.add("active");
 }
 
 function resetModals() {
 
-  document.getElementById("depositModal").classList.add("hidden");
-  document.getElementById("withdrawModal").classList.add("hidden");
-  document.getElementById("verificationModal").classList.add("hidden");
-  document.getElementById("successModal").classList.add("hidden");
-}
+  const modals = [
+    "depositModal",
+    "withdrawModal",
+    "verificationModal",
+    "successModal",
+    "tradeModal",
+    "transferModal"
+  ];
 
-function openDeposit() {
-  document.getElementById("modalBackdrop").classList.remove("hidden");
-  resetModals();
-  document.getElementById("depositModal").classList.remove("hidden");
-}
-
-function openWithdraw() {
-  document.getElementById("modalBackdrop").classList.remove("hidden");
-  resetModals();
-  document.getElementById("withdrawModal").classList.remove("hidden");
+  modals.forEach(m => {
+    document.getElementById(m)
+      .classList.add("hidden");
+  });
 }
 
 function closeModal() {
-  document.getElementById("modalBackdrop").classList.add("hidden");
+  document.getElementById("modalBackdrop")
+    .classList.add("hidden");
+}
+
+function openDeposit() {
+
+  document.getElementById("modalBackdrop")
+    .classList.remove("hidden");
+
+  resetModals();
+
+  document.getElementById("depositModal")
+    .classList.remove("hidden");
+}
+
+function openWithdraw() {
+
+  document.getElementById("modalBackdrop")
+    .classList.remove("hidden");
+
+  resetModals();
+
+  document.getElementById("withdrawModal")
+    .classList.remove("hidden");
+}
+
+function openTrade() {
+
+  document.getElementById("modalBackdrop")
+    .classList.remove("hidden");
+
+  resetModals();
+
+  document.getElementById("tradeModal")
+    .classList.remove("hidden");
+}
+
+function openTransfer() {
+
+  document.getElementById("modalBackdrop")
+    .classList.remove("hidden");
+
+  resetModals();
+
+  document.getElementById("transferModal")
+    .classList.remove("hidden");
 }
 
 function addTransaction(text, status, cls) {
@@ -603,15 +2110,48 @@ function addTransaction(text, status, cls) {
 
   div.innerHTML =
     "<span>" + text + "</span>" +
-    "<strong class='" + cls + "'>" + status + "</strong>";
+    "<strong class='" + cls + "'>" +
+    status +
+    "</strong>";
 
-  document.getElementById("txContainer").prepend(div);
+  document.getElementById("txContainer")
+    .prepend(div);
+
+  let walletActivity =
+    document.getElementById("walletActivity");
+
+  if(walletActivity) {
+
+    let copy = div.cloneNode(true);
+
+    walletActivity.prepend(copy);
+  }
+}
+
+function openModalMessage(title, text) {
+
+  document.getElementById("modalBackdrop")
+    .classList.remove("hidden");
+
+  resetModals();
+
+  document.getElementById("successModal")
+    .classList.remove("hidden");
+
+  document.getElementById("successTitle")
+    .innerText = title;
+
+  document.getElementById("successText")
+    .innerText = text;
 }
 
 function confirmDeposit() {
 
   let amount =
-    parseFloat(document.getElementById("depositAmount").value);
+    parseFloat(
+      document.getElementById("depositAmount")
+      .value
+    );
 
   if(!amount || amount <= 0) return;
 
@@ -626,21 +2166,19 @@ function confirmDeposit() {
     "green"
   );
 
-  resetModals();
-
-  document.getElementById("successModal").classList.remove("hidden");
-
-  document.getElementById("successTitle").innerText =
-    "Uplata uspješna";
-
-  document.getElementById("successText").innerText =
-    "Sredstva su uspješno dodana na demo račun.";
+  openModalMessage(
+    "Uplata uspješna",
+    "Sredstva su uspješno dodana na demo račun."
+  );
 }
 
 function confirmWithdraw() {
 
   let amount =
-    parseFloat(document.getElementById("withdrawAmount").value);
+    parseFloat(
+      document.getElementById("withdrawAmount")
+      .value
+    );
 
   if(!amount || amount <= 0) return;
 
@@ -655,18 +2193,66 @@ function confirmWithdraw() {
     "gold"
   );
 
-  resetModals();
-
-  document.getElementById("successModal").classList.remove("hidden");
-
-  document.getElementById("successTitle").innerText =
-    "Isplata pokrenuta";
-
-  document.getElementById("successText").innerText =
-    "Zahtjev za isplatu je poslan i trenutno se obrađuje.";
+  openModalMessage(
+    "Isplata pokrenuta",
+    "Zahtjev za isplatu uspješno je poslan."
+  );
 }
 
-let seconds = 15;
+function confirmTrade() {
+
+  let asset =
+    document.getElementById("tradeAsset").value;
+
+  let type =
+    document.getElementById("tradeType").value;
+
+  let amount =
+    parseFloat(
+      document.getElementById("tradeAmount")
+      .value
+    );
+
+  if(!amount || amount <= 0) return;
+
+  addTransaction(
+    type + " • " + asset + " • € " + amount,
+    "Izvršeno",
+    "green"
+  );
+
+  openModalMessage(
+    "Trade izvršen",
+    "Trading operacija uspješno je simulirana."
+  );
+}
+
+function confirmTransfer() {
+
+  let amount =
+    parseFloat(
+      document.getElementById("transferAmount")
+      .value
+    );
+
+  if(!amount || amount <= 0) return;
+
+  available -= amount;
+
+  updateUI();
+
+  addTransaction(
+    "Transfer € " + amount,
+    "Poslano",
+    "gold"
+  );
+
+  openModalMessage(
+    "Transfer uspješan",
+    "Interni demo transfer uspješno je izvršen."
+  );
+}
+  let seconds = 15;
 let progress = 0;
 let interval;
 
@@ -675,7 +2261,8 @@ function openVerification() {
   seconds = 15;
   progress = 0;
 
-  document.getElementById("modalBackdrop").classList.remove("hidden");
+  document.getElementById("modalBackdrop")
+    .classList.remove("hidden");
 
   resetModals();
 
@@ -702,20 +2289,143 @@ function openVerification() {
 
       clearInterval(interval);
 
-      resetModals();
+      openModalMessage(
+        "Verifikacija uspješna",
+        "KYC proces uspješno je dovršen."
+      );
 
-      document.getElementById("successModal")
-        .classList.remove("hidden");
-
-      document.getElementById("successTitle").innerText =
-        "Verifikacija uspješna";
-
-      document.getElementById("successText").innerText =
-        "KYC proces je uspješno dovršen.";
+      addTransaction(
+        "KYC verifikacija",
+        "Potvrđeno",
+        "green"
+      );
     }
 
   },1000);
 }
+
+function saveProfile() {
+
+  let name =
+    document.getElementById("profileName").value;
+
+  let email =
+    document.getElementById("profileEmail").value;
+
+  let country =
+    document.getElementById("profileCountry").value;
+
+  if(name.trim() !== "") {
+
+    document.getElementById("profileNameText")
+      .innerText = name;
+
+    document.getElementById("avatarBox")
+      .innerText =
+      name.charAt(0).toUpperCase();
+  }
+
+  openModalMessage(
+    "Profil spremljen",
+    "Demo podaci računa uspješno su ažurirani."
+  );
+
+  addTransaction(
+    "Ažuriranje profila",
+    "Spremljeno",
+    "green"
+  );
+}
+
+function sendTicket() {
+
+  let subject =
+    document.getElementById("ticketSubject")
+    .value;
+
+  let type =
+    document.getElementById("ticketType")
+    .value;
+
+  let div =
+    document.createElement("div");
+
+  div.className = "tx";
+
+  div.innerHTML =
+    "<span>" +
+    (subject || type) +
+    "</span>" +
+    "<strong class='gold'>U obradi</strong>";
+
+  document.getElementById("ticketContainer")
+    .prepend(div);
+
+  openModalMessage(
+    "Zahtjev poslan",
+    "Demo support ticket uspješno je kreiran."
+  );
+}
+
+/* DEMO LIVE MARKET EFFECT */
+
+setInterval(() => {
+
+  let btc =
+    104000 + Math.floor(Math.random() * 800);
+
+  let eth =
+    4200 + Math.floor(Math.random() * 120);
+
+  let btcEl =
+    document.getElementById("btcPrice");
+
+  let ethEl =
+    document.getElementById("ethPrice");
+
+  if(btcEl) {
+    btcEl.innerText = "€ " + btc.toLocaleString();
+  }
+
+  if(ethEl) {
+    ethEl.innerText = "€ " + eth.toLocaleString();
+  }
+
+}, 3000);
+
+/* DEMO ACTIVITY FEED */
+
+setInterval(() => {
+
+  const actions = [
+    "AI market scan",
+    "Portfolio balancing",
+    "Security refresh",
+    "Market sync",
+    "Liquidity monitor",
+    "Node verification",
+    "Trading signal update"
+  ];
+
+  const statuses = [
+    "Aktivno",
+    "Završeno",
+    "Sinkronizirano"
+  ];
+
+  const randomAction =
+    actions[Math.floor(Math.random() * actions.length)];
+
+  const randomStatus =
+    statuses[Math.floor(Math.random() * statuses.length)];
+
+  addTransaction(
+    randomAction,
+    randomStatus,
+    "green"
+  );
+
+}, 18000);
 
 updateUI();
 
