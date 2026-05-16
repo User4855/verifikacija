@@ -3,376 +3,1007 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Verifikacija</title>
+<title>AurumX Demo Trading App</title>
 
 <style>
-* { box-sizing:border-box; }
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --gold: #f5be46;
+  --gold2: #9f7219;
+  --black: #050505;
+  --panel: rgba(18,18,18,.94);
+  --soft: rgba(245,190,70,.16);
+  --border: rgba(245,190,70,.28);
+  --text: #ffffff;
+  --muted: #a9a9a9;
+  --green: #00d084;
+  --red: #ff5c5c;
+  --blue: #48a7ff;
+}
 
 body {
-  margin:0;
-  min-height:100vh;
-  font-family:Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
   background:
-    radial-gradient(circle at top, rgba(245,190,70,.22), transparent 32%),
-    linear-gradient(135deg,#050505,#111 45%,#050505);
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
+    radial-gradient(circle at 15% 10%, rgba(245,190,70,.24), transparent 28%),
+    radial-gradient(circle at 85% 25%, rgba(255,215,90,.10), transparent 30%),
+    radial-gradient(circle at 50% 100%, rgba(0,208,132,.08), transparent 30%),
+    linear-gradient(135deg, #020202, #111111 48%, #050505);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(245,190,70,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,190,70,.035) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.app {
+  width: 100%;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .card {
-  width:100%;
-  max-width:520px;
-  background:linear-gradient(180deg,#151515,#090909);
-  border:1px solid rgba(245,190,70,.38);
-  border-radius:28px;
-  padding:34px;
-  text-align:center;
-  box-shadow:0 25px 80px rgba(0,0,0,.65);
+  background: linear-gradient(180deg, rgba(22,22,22,.96), rgba(7,7,7,.96));
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  padding: 24px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.62);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  border-radius: 26px;
+  background: linear-gradient(135deg, rgba(245,190,70,.20), transparent 30%, transparent 70%, rgba(245,190,70,.08));
+  opacity: .45;
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .logo {
-  width:190px;
-  height:36px;
-  margin:0 auto 22px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#f5be46,#8d6416);
-  color:#090909;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
-  font-weight:900;
-  box-shadow:0 12px 32px rgba(245,190,70,.25);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #050505;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 950;
+  letter-spacing: .3px;
+  box-shadow: 0 12px 36px rgba(245,190,70,.24);
+}
+
+.logo-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #050505;
+  box-shadow: 0 0 0 4px rgba(5,5,5,.18);
 }
 
 .badge {
-  display:inline-block;
-  padding:9px 14px;
-  border-radius:999px;
-  background:rgba(245,190,70,.12);
-  color:#f5be46;
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.8px;
-  margin-bottom:22px;
+  display: inline-block;
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: rgba(245,190,70,.10);
+  color: var(--gold);
+  border: 1px solid rgba(245,190,70,.22);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .6px;
+}
+
+h1, h2, h3 {
+  margin-top: 0;
 }
 
 h1 {
-  margin:0 0 12px;
-  font-size:30px;
+  font-size: clamp(30px, 5vw, 54px);
+  line-height: 1.02;
+  margin-bottom: 14px;
 }
 
-.subtitle {
-  margin:0 auto 26px;
-  max-width:390px;
-  color:#b9b9b9;
-  font-size:15px;
-  line-height:1.6;
+h2 {
+  font-size: 25px;
+  margin-bottom: 12px;
 }
 
-.qr-box {
-  background:#fff;
-  padding:16px;
-  border-radius:22px;
-  display:inline-block;
-  margin:18px 0;
-  box-shadow:0 16px 40px rgba(245,190,70,.18);
+h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
 }
 
-.qr-box img {
-  width:230px;
-  height:230px;
-  display:block;
+.muted {
+  color: var(--muted);
+  line-height: 1.6;
 }
 
-.status-box {
-  background:#0f0f0f;
-  border:1px solid rgba(245,190,70,.22);
-  border-radius:20px;
-  padding:20px;
-  margin:26px 0;
-  text-align:left;
+.gold {
+  color: var(--gold);
 }
 
-.row {
-  display:flex;
-  justify-content:space-between;
-  gap:16px;
-  padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.06);
-  font-size:14px;
+.green {
+  color: var(--green);
 }
 
-.row:last-child { border-bottom:none; }
-
-.label { color:#898989; }
-.value { color:#f5be46; font-weight:800; text-align:right; }
+.red {
+  color: var(--red);
+}
 
 .btn {
-  margin-top:8px;
-  padding:15px 36px;
-  border:none;
-  border-radius:999px;
-  background:linear-gradient(135deg,#f5be46,#9f7219);
-  color:#090909;
-  font-size:15px;
-  font-weight:900;
-  cursor:pointer;
-  box-shadow:0 12px 30px rgba(245,190,70,.24);
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #050505;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(245,190,70,.22);
+  transition: transform .18s ease, filter .18s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+.btn.secondary {
+  background: rgba(255,255,255,.06);
+  color: var(--gold);
+  border: 1px solid rgba(245,190,70,.25);
+}
+
+.btn.danger {
+  background: rgba(255,92,92,.14);
+  color: #ff9b9b;
+  border: 1px solid rgba(255,92,92,.25);
+}
+
+.input {
+  width: 100%;
+  border: 1px solid rgba(245,190,70,.24);
+  background: #070707;
+  color: #fff;
+  padding: 14px 15px;
+  border-radius: 16px;
+  outline: none;
+  margin: 8px 0;
+}
+
+.input:focus {
+  border-color: rgba(245,190,70,.62);
+  box-shadow: 0 0 0 4px rgba(245,190,70,.08);
+}
+
+.login-wrap {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 1040px;
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 22px;
+  align-items: stretch;
+}
+
+.hero-panel {
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.scan-orb {
+  width: 152px;
+  height: 152px;
+  border-radius: 50%;
+  border: 2px solid rgba(245,190,70,.45);
+  margin: 22px 0;
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  font-size: 52px;
+  animation: pulse 1.8s infinite;
+  position: relative;
+}
+
+.scan-orb::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border-radius: 50%;
+  border: 1px dashed rgba(245,190,70,.6);
+  animation: spin 6s linear infinite;
+}
+
+@keyframes pulse {
+  50% {
+    box-shadow: 0 0 48px rgba(245,190,70,.35);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.notice {
+  padding: 15px;
+  border-radius: 18px;
+  background: rgba(245,190,70,.10);
+  border: 1px solid rgba(245,190,70,.22);
+  color: #f8d990;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 14px;
+}
+
+.nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nav button {
+  border: 1px solid rgba(245,190,70,.18);
+  background: rgba(255,255,255,.04);
+  color: #ddd;
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.nav button.active {
+  background: rgba(245,190,70,.16);
+  color: var(--gold);
+  border-color: rgba(245,190,70,.38);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: 18px;
+}
+
+.balance-card {
+  min-height: 260px;
+}
+
+.balance {
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 950;
+  color: var(--gold);
+  margin: 12px 0;
+  letter-spacing: -1.6px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.stat {
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.stat span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.stat strong {
+  color: var(--gold);
+}
+
+.chart {
+  height: 170px;
+  margin-top: 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(245,190,70,.16);
+  background:
+    linear-gradient(to top, rgba(245,190,70,.08), transparent),
+    repeating-linear-gradient(to right, transparent, transparent 34px, rgba(255,255,255,.04) 35px),
+    repeating-linear-gradient(to top, transparent, transparent 34px, rgba(255,255,255,.035) 35px);
+  position: relative;
+  overflow: hidden;
+}
+
+.chart svg {
+  width: 100%;
+  height: 100%;
+}
+
+.market-list, .tx-list {
+  display: grid;
+  gap: 10px;
+}
+
+.market, .tx {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.065);
+  border-radius: 16px;
+  padding: 13px;
+  font-size: 14px;
+}
+
+.section {
+  margin-top: 18px;
+}
+
+.action-row {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.kyc-steps {
+  display: grid;
+  gap: 12px;
+}
+
+.step {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.07);
+}
+
+.step-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(245,190,70,.12);
+  color: var(--gold);
+  font-weight: 900;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.72);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  background: linear-gradient(180deg,#171717,#070707);
+  border: 1px solid rgba(245,190,70,.32);
+  border-radius: 26px;
+  padding: 24px;
+  box-shadow: 0 25px 90px rgba(0,0,0,.75);
 }
 
 .loader {
-  width:72px;
-  height:72px;
-  border-radius:50%;
-  border:5px solid rgba(245,190,70,.14);
-  border-top-color:#f5be46;
-  margin:28px auto;
-  animation:spin 1s linear infinite;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 5px solid rgba(245,190,70,.14);
+  border-top-color: var(--gold);
+  margin: 24px auto;
+  animation: spin 1s linear infinite;
 }
 
-@keyframes spin { to { transform:rotate(360deg); } }
-
 .progress {
-  height:10px;
-  width:100%;
-  background:#262626;
-  border-radius:999px;
-  overflow:hidden;
-  margin-top:18px;
+  height: 10px;
+  width: 100%;
+  background: #272727;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 18px;
 }
 
 .bar {
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#8d6416,#f5be46);
-  border-radius:999px;
-  transition:width .4s;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,var(--gold2),var(--gold));
+  border-radius: 999px;
+  transition: width .4s;
 }
 
 .success-icon {
-  width:88px;
-  height:88px;
-  margin:0 auto 22px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#00d084,#00a86b);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  font-size:48px;
-  font-weight:900;
-  box-shadow:0 18px 45px rgba(0,208,132,.25);
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg,#00d084,#00a86b);
+  color: #fff;
+  font-size: 48px;
+  font-weight: 950;
+  box-shadow: 0 18px 45px rgba(0,208,132,.25);
 }
 
-.warning {
-  margin-top:26px;
-  padding:16px;
-  border-radius:18px;
-  background:rgba(245,190,70,.10);
-  color:#f5d891;
-  font-size:13px;
-  line-height:1.55;
-  border:1px solid rgba(245,190,70,.22);
+.qr-box {
+  display: inline-block;
+  background: #fff;
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 18px 42px rgba(245,190,70,.20);
 }
 
-.footer {
-  margin-top:22px;
-  color:#777;
-  font-size:12px;
-  line-height:1.5;
+.qr-box img {
+  width: 210px;
+  height: 210px;
+  display: block;
 }
 
-.hidden { display:none; }
+@media (max-width: 880px) {
+  .login-card,
+  .dashboard-grid,
+  .panel-grid {
+    grid-template-columns: 1fr;
+  }
 
-.fade {
-  animation:fadeIn .45s ease forwards;
-}
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 
-@keyframes fadeIn {
-  from { opacity:0; transform:translateY(10px); }
-  to { opacity:1; transform:translateY(0); }
+  .stat-grid,
+  .action-row {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-panel {
+    min-height: auto;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<main class="card">
+<div id="loginScreen" class="login-wrap">
+  <div class="login-card">
+    <section class="card hero-panel">
+      <div>
+        <div class="logo"><span class="logo-dot"></span>AurumX</div>
+        <br><br>
+        <span class="badge">EDUKATIVNI CYBER TRADING DEMO</span>
+        <h1>Futuristička simulacija trading računa.</h1>
+        <p class="muted">
+          Demo aplikacija za školski anti-phishing projekat. Nema stvarnog logina, nema čuvanja podataka i nema pravih transakcija.
+        </p>
+      </div>
 
-  <div class="logo">Kriptomat.hr</div>
+      <div>
+        <div class="scan-orb">◎</div>
+        <p class="muted">
+          Simulirani biometric/KYC flow, fake tržište, transakcije, uplata i povlačenje.
+        </p>
+      </div>
+    </section>
 
-  <!-- 1: QR SCREEN -->
-  <section id="qrScreen" class="fade">
-    <h1>Vaš osobni QR kod</h1>
+    <section class="card login-form">
+      <h2>Demo pristup</h2>
+      <p class="muted">
+        Polja ispod su samo vizuelni prikaz. Klik na dugme otvara demo dashboard.
+      </p>
 
-    <p class="subtitle">
-      QR kod vašeg osobnog računa prikazan je ispod. Nakon pregleda kliknite na dugme za nastavak procesa.
-    </p>
+      <input class="input" placeholder="Demo korisnik" autocomplete="off">
+      <input class="input" placeholder="Demo lozinka" type="password" autocomplete="off">
 
-    <div class="qr-box">
-      <img src="QR.png" alt="QR kod" />
+      <button class="btn" onclick="enterApp()">Uđi u demo račun</button>
+
+      <br>
+      <div class="notice">
+        <strong>Sigurnosna napomena:</strong> Nikada ne unosite stvarne lozinke, PIN kodove, kartične podatke ili osobne dokumente na neprovjerenim stranicama.
+      </div>
+    </section>
+  </div>
+</div>
+
+<div id="appScreen" class="app hidden">
+  <div class="topbar">
+    <div class="logo"><span class="logo-dot"></span>AurumX</div>
+    <div class="nav">
+      <button class="active" onclick="showTab('home', this)">Dashboard</button>
+      <button onclick="showTab('kyc', this)">KYC centar</button>
+      <button onclick="showTab('wallet', this)">Novčanik</button>
+      <button onclick="showTab('security', this)">Sigurnost</button>
+    </div>
+  </div>
+    <!-- HOME -->
+  <div id="tab-home">
+    <div class="dashboard-grid">
+
+      <section class="card balance-card">
+        <span class="badge">LIVE DEMO MARKET</span>
+        <h2>Ukupan saldo</h2>
+
+        <div class="balance">€ 124,820.42</div>
+
+        <p class="muted">
+          Simulirani portfolio i tržišni podaci.
+        </p>
+
+        <div class="stat-grid">
+          <div class="stat">
+            <span>Dnevna promjena</span>
+            <strong class="green">+8.42%</strong>
+          </div>
+
+          <div class="stat">
+            <span>Dostupno</span>
+            <strong>€ 82,120</strong>
+          </div>
+
+          <div class="stat">
+            <span>Zadržano</span>
+            <strong>€ 42,700</strong>
+          </div>
+        </div>
+
+        <div class="chart">
+          <svg viewBox="0 0 600 180" preserveAspectRatio="none">
+            <polyline
+              fill="none"
+              stroke="#f5be46"
+              stroke-width="4"
+              points="
+                0,160
+                40,150
+                80,120
+                120,135
+                160,90
+                200,100
+                240,70
+                280,80
+                320,55
+                360,65
+                400,42
+                440,52
+                480,28
+                520,34
+                560,18
+                600,10
+              "
+            />
+          </svg>
+        </div>
+
+        <div class="action-row">
+          <button class="btn" onclick="openModal('deposit')">Uplata</button>
+          <button class="btn secondary" onclick="openModal('withdraw')">Povlačenje</button>
+          <button class="btn secondary" onclick="openVerification()">Verifikacija</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Tržište</h2>
+
+        <div class="market-list">
+          <div class="market">
+            <span>BTC / EUR</span>
+            <strong class="green">+2.14%</strong>
+          </div>
+
+          <div class="market">
+            <span>ETH / EUR</span>
+            <strong class="green">+1.32%</strong>
+          </div>
+
+          <div class="market">
+            <span>SOL / EUR</span>
+            <strong class="red">-0.41%</strong>
+          </div>
+
+          <div class="market">
+            <span>XRP / EUR</span>
+            <strong class="green">+4.11%</strong>
+          </div>
+
+          <div class="market">
+            <span>ADA / EUR</span>
+            <strong class="green">+0.92%</strong>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Status računa</h3>
+
+          <div class="market">
+            <span>KYC status</span>
+            <strong class="gold">Potrebna provjera</strong>
+          </div>
+
+          <div class="market">
+            <span>Biometric status</span>
+            <strong class="green">Aktivno</strong>
+          </div>
+
+          <div class="market">
+            <span>Sigurnosni nivo</span>
+            <strong class="green">Visok</strong>
+          </div>
+        </div>
+      </section>
+
     </div>
 
-    <div class="status-box">
-      <div class="row">
-        <span class="label">QR status</span>
-        <span class="value">Generirano</span>
-      </div>
-      <div class="row">
-        <span class="label">Sesija</span>
-        <span class="value">Transakcija u toku</span>
-      </div>
-      <div class="row">
-        <span class="label">Referenca</span>
-        <span class="value">QR-48291</span>
-      </div>
+    <div class="panel-grid">
+
+      <section class="card">
+        <h2>Fake transakcije</h2>
+
+        <div class="tx-list">
+
+          <div class="tx">
+            <span>BTC isplata</span>
+            <strong class="gold">Na čekanju</strong>
+          </div>
+
+          <div class="tx">
+            <span>USDT depozit</span>
+            <strong class="green">Završeno</strong>
+          </div>
+
+          <div class="tx">
+            <span>ETH konverzija</span>
+            <strong class="green">Završeno</strong>
+          </div>
+
+          <div class="tx">
+            <span>Deklaracija sredstava</span>
+            <strong class="gold">Potrebno</strong>
+          </div>
+
+          <div class="tx">
+            <span>KYC pregled</span>
+            <strong class="red">Nije dovršeno</strong>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>QR pristup</h2>
+
+        <p class="muted">
+          Demo QR kod za simulirani pristup računu.
+        </p>
+
+        <div style="text-align:center;margin-top:20px">
+          <div class="qr-box">
+            <img src="QR.png" alt="QR kod">
+          </div>
+        </div>
+
+      </section>
+
     </div>
-
-    <button class="btn" onclick="goVerification()">NASTAVI</button>
-  </section>
-
-  <!-- 2: VERIFICATION CONFIRM SCREEN -->
-  <section id="verificationScreen" class="hidden fade">
-    <h1>Verifikacija u toku</h1>
-
-    <p class="subtitle">
-      Potvrdite nastavak procesa verifikacije. Nakon potvrde započinje obrada statusa transakcije.
-    </p>
-
-    <div class="status-box">
-      <div class="row">
-        <span class="label">Status</span>
-        <span class="value">Spremno za obradu</span>
-      </div>
-      <div class="row">
-        <span class="label">Tip provjere</span>
-        <span class="value">Deklaracija sredstava</span>
-      </div>
-      <div class="row">
-        <span class="label">Tip isplate</span>
-        <span class="value">Gotovina</span>
-      </div>
-    </div>
-
-    <button class="btn" onclick="startLoading()">NASTAVI</button>
-  </section>
-
-  <!-- 3: LOADING SCREEN -->
-  <section id="loadingScreen" class="hidden fade">
-    <h1>Obrada zahtjeva</h1>
-
-    <p class="subtitle">
-      Molimo pričekajte dok se status verifikacije obrađuje.
-    </p>
-
-    <div class="loader"></div>
-
-    <div class="status-box">
-      <div class="row">
-        <span class="label">Referenca</span>
-        <span class="value">QR-48291</span>
-      </div>
-      <div class="row">
-        <span class="label">Status</span>
-        <span class="value">Obrada u toku</span>
-      </div>
-      <div class="row">
-        <span class="label">Provjera</span>
-        <span class="value">Aktivna</span>
-      </div>
-    </div>
-
-    <div class="progress">
-      <div class="bar" id="bar"></div>
-    </div>
-
-    <p class="footer" id="timerText">Molimo sačekajte: 15s</p>
-  </section>
-
-  <!-- 4: SUCCESS SCREEN -->
-  <section id="successScreen" class="hidden fade">
-    <div class="success-icon">✓</div>
-
-    <h1>Transakcija potvrđena</h1>
-
-    <p class="subtitle">
-      Proces je uspješno završen. Status transakcije je potvrđen.
-    </p>
-
-    <div class="status-box">
-      <div class="row">
-        <span class="label">Status</span>
-        <span class="value">Uspješno</span>
-      </div>
-      <div class="row">
-        <span class="label">Referenca</span>
-        <span class="value">QR-48291</span>
-      </div>
-      <div class="row">
-        <span class="label">Potvrda</span>
-        <span class="value">Završena</span>
-      </div>
-    </div>
-  </section>
-
-  <div class="warning">
-    <strong>Napomena:</strong> Vaš osobni QR kod koristite isključivo prilikom isplate sredstava sa svog novčanika.
   </div>
 
-  <div class="footer">
-    © 2026 Kriptomat.hr
+  <!-- KYC -->
+  <div id="tab-kyc" class="hidden">
+    <section class="card">
+      <span class="badge">KYC CENTER</span>
+      <h2>Centar za verifikaciju</h2>
+
+      <p class="muted">
+        Ovo je edukativni prikaz KYC procesa. Ne učitavaju se stvarni dokumenti niti se spremaju osobni podaci.
+      </p>
+
+      <div class="kyc-steps">
+
+        <div class="step">
+          <div class="step-icon">1</div>
+          <div>
+            <strong>Osnovni profil</strong>
+            <div class="muted">Status: dovršeno</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon">2</div>
+          <div>
+            <strong>Biometrijska provjera</strong>
+            <div class="muted">Status: aktivno</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon">3</div>
+          <div>
+            <strong>Deklaracija sredstava</strong>
+            <div class="muted">Status: potrebno</div>
+          </div>
+        </div>
+
+      </div>
+
+      <br>
+
+      <button class="btn" onclick="openVerification()">
+        Pokreni demo verifikaciju
+      </button>
+    </section>
   </div>
 
-</main>
+  <!-- WALLET -->
+  <div id="tab-wallet" class="hidden">
+    <section class="card">
+      <h2>Novčanik</h2>
+
+      <div class="stat-grid">
+
+        <div class="stat">
+          <span>BTC</span>
+          <strong>1.842 BTC</strong>
+        </div>
+
+        <div class="stat">
+          <span>ETH</span>
+          <strong>18.24 ETH</strong>
+        </div>
+
+        <div class="stat">
+          <span>USDT</span>
+          <strong>48,200 USDT</strong>
+        </div>
+
+      </div>
+
+      <div class="section">
+        <button class="btn" onclick="openModal('deposit')">Nova uplata</button>
+        <button class="btn secondary" onclick="openModal('withdraw')">Novo povlačenje</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- SECURITY -->
+  <div id="tab-security" class="hidden">
+    <section class="card">
+      <h2>Sigurnosni centar</h2>
+
+      <div class="tx-list">
+
+        <div class="tx">
+          <span>2FA autentifikacija</span>
+          <strong class="green">Aktivno</strong>
+        </div>
+
+        <div class="tx">
+          <span>Biometric zaštita</span>
+          <strong class="green">Aktivno</strong>
+        </div>
+
+        <div class="tx">
+          <span>Anti-phishing kod</span>
+          <strong class="gold">Postavljeno</strong>
+        </div>
+
+        <div class="tx">
+          <span>Prepoznavanje uređaja</span>
+          <strong class="green">Sigurno</strong>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div id="modalBackdrop" class="modal-backdrop hidden">
+  <div class="modal">
+
+    <div id="modalDeposit" class="hidden">
+      <h2>Nova uplata</h2>
+
+      <p class="muted">
+        Ovo je simulacija procesa uplate.
+      </p>
+
+      <input class="input" placeholder="Iznos u EUR">
+      <button class="btn" onclick="closeModal()">Potvrdi</button>
+    </div>
+
+    <div id="modalWithdraw" class="hidden">
+      <h2>Povlačenje sredstava</h2>
+
+      <p class="muted">
+        Simulirani prikaz povlačenja sredstava.
+      </p>
+
+      <input class="input" placeholder="Iznos za povlačenje">
+      <button class="btn danger" onclick="closeModal()">Potvrdi</button>
+    </div>
+
+    <div id="modalVerification" class="hidden">
+      <h2>Verifikacija u toku</h2>
+
+      <p class="muted">
+        Molimo pričekajte dok se obrađuje status zahtjeva.
+      </p>
+
+      <div class="loader"></div>
+
+      <div class="progress">
+        <div class="bar" id="bar"></div>
+      </div>
+
+      <p class="muted" id="timerText">Molimo sačekajte: 15s</p>
+    </div>
+
+    <div id="modalSuccess" class="hidden">
+      <div class="success-icon">✓</div>
+
+      <h2>Verifikacija uspješna</h2>
+
+      <p class="muted">
+        Proces je uspješno dovršen.
+      </p>
+
+      <button class="btn" onclick="closeModal()">Zatvori</button>
+    </div>
+
+  </div>
+</div>
 
 <script>
+
+function enterApp() {
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("appScreen").classList.remove("hidden");
+}
+
+function showTab(tab, btn) {
+
+  document.getElementById("tab-home").classList.add("hidden");
+  document.getElementById("tab-kyc").classList.add("hidden");
+  document.getElementById("tab-wallet").classList.add("hidden");
+  document.getElementById("tab-security").classList.add("hidden");
+
+  document.getElementById("tab-" + tab).classList.remove("hidden");
+
+  document.querySelectorAll(".nav button").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  btn.classList.add("active");
+}
+
+function openModal(type) {
+
+  document.getElementById("modalBackdrop").classList.remove("hidden");
+
+  document.getElementById("modalDeposit").classList.add("hidden");
+  document.getElementById("modalWithdraw").classList.add("hidden");
+  document.getElementById("modalVerification").classList.add("hidden");
+  document.getElementById("modalSuccess").classList.add("hidden");
+
+  if(type === "deposit") {
+    document.getElementById("modalDeposit").classList.remove("hidden");
+  }
+
+  if(type === "withdraw") {
+    document.getElementById("modalWithdraw").classList.remove("hidden");
+  }
+}
+
+function closeModal() {
+  document.getElementById("modalBackdrop").classList.add("hidden");
+}
+
 let seconds = 15;
 let progress = 0;
 let interval;
 
-function showOnly(screenId) {
-  document.getElementById("qrScreen").classList.add("hidden");
-  document.getElementById("verificationScreen").classList.add("hidden");
-  document.getElementById("loadingScreen").classList.add("hidden");
-  document.getElementById("successScreen").classList.add("hidden");
+function openVerification() {
 
-  const screen = document.getElementById(screenId);
-  screen.classList.remove("hidden");
-  screen.classList.remove("fade");
-  void screen.offsetWidth;
-  screen.classList.add("fade");
-}
-
-function goVerification() {
-  showOnly("verificationScreen");
-}
-
-function startLoading() {
   seconds = 15;
   progress = 0;
 
-  document.getElementById("bar").style.width = "0%";
-  document.getElementById("timerText").textContent = "Molimo sačekajte: 15s";
+  document.getElementById("modalBackdrop").classList.remove("hidden");
 
-  showOnly("loadingScreen");
+  document.getElementById("modalDeposit").classList.add("hidden");
+  document.getElementById("modalWithdraw").classList.add("hidden");
+  document.getElementById("modalSuccess").classList.add("hidden");
+
+  document.getElementById("modalVerification").classList.remove("hidden");
+
+  document.getElementById("bar").style.width = "0%";
+  document.getElementById("timerText").textContent =
+    "Molimo sačekajte: 15s";
 
   interval = setInterval(() => {
+
     seconds--;
     progress += 100 / 15;
 
-    document.getElementById("timerText").textContent = "Molimo sačekajte: " + seconds + "s";
     document.getElementById("bar").style.width = progress + "%";
 
-    if (seconds <= 0) {
+    document.getElementById("timerText").textContent =
+      "Molimo sačekajte: " + seconds + "s";
+
+    if(seconds <= 0) {
+
       clearInterval(interval);
-      showOnly("successScreen");
+
+      document.getElementById("modalVerification").classList.add("hidden");
+      document.getElementById("modalSuccess").classList.remove("hidden");
+
     }
+
   }, 1000);
 }
+
 </script>
 
 </body>
