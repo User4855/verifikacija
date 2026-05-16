@@ -696,24 +696,41 @@ textarea {
     </section>
 
     <section class="card">
-      <h2>Demo pristup</h2>
-      <p class="muted">
-        Polja su vizualni prikaz. Klik otvara demo dashboard bez stvarnog slanja podataka.
-      </p>
+  <h2 id="authTitle">Prijava u demo račun</h2>
 
-      <input class="input" id="loginName" placeholder="Demo korisnik">
-      <input class="input" placeholder="Demo lozinka" type="password">
+  <p class="muted" id="authText">
+    Prijavite se postojećim demo podacima ili kreirajte novi demo račun.
+  </p>
 
-      <button class="btn" onclick="enterApp()">Uđi u demo račun</button>
+  <div id="loginForm">
+    <input class="input" id="loginEmail" placeholder="E-mail adresa">
+    <input class="input" id="loginPassword" placeholder="Lozinka" type="password">
 
-      <br><br>
+    <button class="btn" onclick="loginUser()">Prijavi se</button>
+    <button class="btn secondary" onclick="showRegister()">Registracija</button>
 
-      <div class="notice">
-        <strong>Sigurnosna napomena:</strong>
-        Nikada ne unosite stvarne lozinke, PIN kodove, podatke o kartici,
-        osobne dokumente ili recovery phrase na neprovjerenim stranicama.
-      </div>
-    </section>
+    <div id="loginMessage"></div>
+  </div>
+
+  <div id="registerForm" class="hidden">
+    <input class="input" id="regFullName" placeholder="Ime i prezime">
+    <input class="input" id="regEmail" placeholder="E-mail adresa">
+    <input class="input" id="regPassword" placeholder="Lozinka, minimum 8 znakova" type="password">
+    <input class="input" id="regConfirmPassword" placeholder="Potvrdite lozinku" type="password">
+
+    <button class="btn" onclick="registerUser()">Kreiraj demo račun</button>
+    <button class="btn secondary" onclick="showLogin()">Nazad na prijavu</button>
+
+    <div id="registerMessage"></div>
+  </div>
+
+  <br>
+
+  <div class="notice">
+    <strong>Sigurnosna napomena:</strong>
+    Ovo je demo registracija. Podaci se čuvaju samo lokalno u browseru korisnika i ne šalju se nikome.
+  </div>
+</section>
 
   </div>
 </div>
@@ -1988,26 +2005,107 @@ function updateUI() {
   }
 }
 
-function enterApp() {
+let demoProfileVerified = false;
 
-  let name =
-    document.getElementById("loginName").value;
+function showMsg(id, text, type) {
+  const box = document.getElementById(id);
+  box.className = "form-message " + type;
+  box.innerText = text;
+}
 
-  if(name.trim() !== "") {
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
-    document.getElementById("profileNameText")
-      .innerText = name;
+function isValidFullName(name) {
+  return name.trim().split(/\s+/).length >= 2;
+}
 
-    document.getElementById("avatarBox")
-      .innerText = name.charAt(0).toUpperCase();
+function showRegister() {
+  document.getElementById("loginForm").classList.add("hidden");
+  document.getElementById("registerForm").classList.remove("hidden");
+  document.getElementById("authTitle").innerText = "Registracija demo računa";
+  document.getElementById("authText").innerText = "Kreirajte demo račun za pristup platformi.";
+}
 
+function showLogin() {
+  document.getElementById("registerForm").classList.add("hidden");
+  document.getElementById("loginForm").classList.remove("hidden");
+  document.getElementById("authTitle").innerText = "Prijava u demo račun";
+  document.getElementById("authText").innerText = "Prijavite se postojećim demo podacima.";
+}
+
+function registerUser() {
+  const fullName = document.getElementById("regFullName").value.trim();
+  const email = document.getElementById("regEmail").value.trim().toLowerCase();
+  const password = document.getElementById("regPassword").value;
+  const confirmPassword = document.getElementById("regConfirmPassword").value;
+
+  if (!isValidFullName(fullName)) {
+    showMsg("registerMessage", "Unesite ime i prezime, najmanje dvije riječi.", "error");
+    return;
   }
 
-  document.getElementById("loginScreen")
-    .classList.add("hidden");
+  if (!isValidEmail(email)) {
+    showMsg("registerMessage", "Unesite ispravnu e-mail adresu.", "error");
+    return;
+  }
 
-  document.getElementById("appScreen")
-    .classList.remove("hidden");
+  if (password.length < 8) {
+    showMsg("registerMessage", "Lozinka mora imati najmanje 8 znakova.", "error");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    showMsg("registerMessage", "Lozinke se ne podudaraju.", "error");
+    return;
+  }
+
+  const user = {
+    fullName,
+    email,
+    password,
+    profileVerified: true
+  };
+
+  localStorage.setItem("aurumx_demo_user", JSON.stringify(user));
+
+  showMsg("registerMessage", "Demo račun je uspješno kreiran. Sada se možete prijaviti.", "success");
+
+  setTimeout(() => {
+    showLogin();
+    document.getElementById("loginEmail").value = email;
+  }, 900);
+}
+
+function loginUser() {
+  const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+  const password = document.getElementById("loginPassword").value;
+
+  const savedUser = JSON.parse(localStorage.getItem("aurumx_demo_user"));
+
+  if (!savedUser) {
+    showMsg("loginMessage", "Ne postoji registrirani demo račun. Prvo napravite registraciju.", "error");
+    return;
+  }
+
+  if (email !== savedUser.email || password !== savedUser.password) {
+    showMsg("loginMessage", "Pogrešan e-mail ili lozinka.", "error");
+    return;
+  }
+
+  demoProfileVerified = savedUser.profileVerified === true;
+
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("appScreen").classList.remove("hidden");
+
+  if (document.getElementById("profileNameText")) {
+    document.getElementById("profileNameText").innerText = savedUser.fullName;
+  }
+
+  if (document.getElementById("avatarBox")) {
+    document.getElementById("avatarBox").innerText = savedUser.fullName.charAt(0).toUpperCase();
+  }
 }
 
 function showTab(tab, btn) {
@@ -2146,25 +2244,41 @@ function openModalMessage(title, text) {
 }
 
 function confirmDeposit() {
+  const amount = parseFloat(document.getElementById("depositAmount").value);
+  const cardInputs = document.querySelectorAll("#depositModal .input");
 
-  let amount =
-    parseFloat(
-      document.getElementById("depositAmount")
-      .value
-    );
+  const cardNumber = cardInputs[1] ? cardInputs[1].value.trim() : "";
+  const cardName = cardInputs[2] ? cardInputs[2].value.trim() : "";
+  const expiry = cardInputs[3] ? cardInputs[3].value.trim() : "";
 
-  if(!amount || amount <= 0) return;
+  const demoCardFormat = /^4\d{3}\s?\d{4}\s?\d{4}\s?\d{4}$|^5\d{3}\s?\d{4}\s?\d{4}\s?\d{4}$/;
+
+  if (!amount || amount <= 0) {
+    openModalMessage("Greška u uplati", "Unesite ispravan iznos veći od 0.");
+    return;
+  }
+
+  if (!demoCardFormat.test(cardNumber)) {
+    openModalMessage("Greška u kartici", "Unesite demo VISA/Mastercard broj koji počinje sa 4 ili 5 i ima 16 znamenki.");
+    return;
+  }
+
+  if (!isValidFullName(cardName)) {
+    openModalMessage("Greška u imenu", "Unesite ime i prezime vlasnika kartice.");
+    return;
+  }
+
+  if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+    openModalMessage("Greška u datumu", "Datum isteka unesite u formatu MM/YY.");
+    return;
+  }
 
   totalBalance += amount;
   available += amount;
 
   updateUI();
 
-  addTransaction(
-    "Uplata € " + amount,
-    "Uplaćeno",
-    "green"
-  );
+  addTransaction("Uplata € " + amount, "Uplaćeno", "green");
 
   openModalMessage(
     "Uplata uspješna",
@@ -2173,29 +2287,54 @@ function confirmDeposit() {
 }
 
 function confirmWithdraw() {
+  const amount = parseFloat(document.getElementById("withdrawAmount").value);
+  const inputs = document.querySelectorAll("#withdrawModal .input");
 
-  let amount =
-    parseFloat(
-      document.getElementById("withdrawAmount")
-      .value
-    );
+  const firstName = inputs[0] ? inputs[0].value.trim() : "";
+  const lastName = inputs[1] ? inputs[1].value.trim() : "";
+  const idNumber = inputs[2] ? inputs[2].value.trim() : "";
+  const iban = inputs[3] ? inputs[3].value.trim() : "";
 
-  if(!amount || amount <= 0) return;
+  if (!firstName || firstName.length < 2) {
+    openModalMessage("Greška u isplati", "Unesite ispravno ime.");
+    return;
+  }
 
-  totalBalance -= amount;
+  if (!lastName || lastName.length < 2) {
+    openModalMessage("Greška u isplati", "Unesite ispravno prezime.");
+    return;
+  }
+
+  if (idNumber.length < 6) {
+    openModalMessage("Greška u dokumentu", "Broj osobne iskaznice mora imati najmanje 6 znakova.");
+    return;
+  }
+
+  if (!/^HR\d{19}$|^[A-Z]{2}\d{10,30}$/.test(iban.replace(/\s/g, ""))) {
+    openModalMessage("Greška u IBAN-u", "Unesite ispravan IBAN format.");
+    return;
+  }
+
+  if (!amount || amount <= 0) {
+    openModalMessage("Greška u iznosu", "Unesite ispravan iznos za povlačenje.");
+    return;
+  }
+
+  if (amount > available) {
+    openModalMessage("Nedovoljno sredstava", "Iznos za isplatu ne može biti veći od dostupnog balansa.");
+    return;
+  }
+
   available -= amount;
+  hold += amount;
 
   updateUI();
 
-  addTransaction(
-    "Isplata € " + amount,
-    "U procesu",
-    "gold"
-  );
+  addTransaction("Isplata € " + amount, "U procesu isplate", "gold");
 
   openModalMessage(
     "Isplata pokrenuta",
-    "Zahtjev za isplatu uspješno je poslan."
+    "Zahtjev za isplatu je zaprimljen i trenutno je u procesu obrade."
   );
 }
 
@@ -2257,36 +2396,35 @@ let progress = 0;
 let interval;
 
 function openVerification() {
+  if (!demoProfileVerified) {
+    openModalMessage(
+      "Profil nije potvrđen",
+      "KYC verifikacija nije dostupna dok demo profil nije registriran i potvrđen."
+    );
+    return;
+  }
 
   seconds = 15;
   progress = 0;
 
-  document.getElementById("modalBackdrop")
-    .classList.remove("hidden");
+  document.getElementById("modalBackdrop").classList.remove("hidden");
 
   resetModals();
 
-  document.getElementById("verificationModal")
-    .classList.remove("hidden");
+  document.getElementById("verificationModal").classList.remove("hidden");
 
   document.getElementById("bar").style.width = "0%";
 
-  document.getElementById("timerText").innerText =
-    "Molimo sačekajte: 15s";
+  document.getElementById("timerText").innerText = "Molimo sačekajte: 15s";
 
   interval = setInterval(() => {
-
     seconds--;
     progress += 100 / 15;
 
-    document.getElementById("bar").style.width =
-      progress + "%";
+    document.getElementById("bar").style.width = progress + "%";
+    document.getElementById("timerText").innerText = "Molimo sačekajte: " + seconds + "s";
 
-    document.getElementById("timerText").innerText =
-      "Molimo sačekajte: " + seconds + "s";
-
-    if(seconds <= 0) {
-
+    if (seconds <= 0) {
       clearInterval(interval);
 
       openModalMessage(
@@ -2294,14 +2432,9 @@ function openVerification() {
         "KYC proces uspješno je dovršen."
       );
 
-      addTransaction(
-        "KYC verifikacija",
-        "Potvrđeno",
-        "green"
-      );
+      addTransaction("KYC verifikacija", "Potvrđeno", "green");
     }
-
-  },1000);
+  }, 1000);
 }
 
 function saveProfile() {
