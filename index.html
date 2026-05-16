@@ -6,522 +6,147 @@
 <title>AurumX Demo Trading App</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+:root{
+  --gold:#f5be46;--gold2:#9f7219;--bg:#050505;--panel:#111;
+  --green:#00d084;--red:#ff5c5c;--muted:#aaa;--border:rgba(245,190,70,.28)
 }
-
-:root {
-  --gold: #f5be46;
-  --gold2: #9f7219;
-  --black: #050505;
-  --panel: rgba(18,18,18,.94);
-  --soft: rgba(245,190,70,.16);
-  --border: rgba(245,190,70,.28);
-  --text: #ffffff;
-  --muted: #a9a9a9;
-  --green: #00d084;
-  --red: #ff5c5c;
-  --blue: #48a7ff;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
-  color: var(--text);
+body{
+  margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:#fff;
   background:
-    radial-gradient(circle at 15% 10%, rgba(245,190,70,.24), transparent 28%),
-    radial-gradient(circle at 85% 25%, rgba(255,215,90,.10), transparent 30%),
-    radial-gradient(circle at 50% 100%, rgba(0,208,132,.08), transparent 30%),
-    linear-gradient(135deg, #020202, #111111 48%, #050505);
-  overflow-x: hidden;
+  radial-gradient(circle at 20% 10%,rgba(245,190,70,.25),transparent 30%),
+  radial-gradient(circle at 80% 20%,rgba(0,208,132,.08),transparent 28%),
+  linear-gradient(135deg,#020202,#111,#050505);
+  overflow-x:hidden;
 }
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(rgba(245,190,70,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245,190,70,.035) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: linear-gradient(to bottom, black, transparent 85%);
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:linear-gradient(rgba(245,190,70,.035) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(245,190,70,.035) 1px,transparent 1px);
+  background-size:42px 42px;
 }
-
-.hidden {
-  display: none !important;
+.hidden{display:none!important}
+.app{max-width:1220px;margin:auto;padding:20px}
+.card{
+  background:linear-gradient(180deg,rgba(24,24,24,.96),rgba(7,7,7,.96));
+  border:1px solid var(--border);border-radius:26px;padding:24px;
+  box-shadow:0 24px 80px rgba(0,0,0,.65);position:relative;overflow:hidden
 }
-
-.app {
-  width: 100%;
-  max-width: 1220px;
-  margin: 0 auto;
-  padding: 20px;
+.card:after{
+  content:"";position:absolute;inset:-2px;pointer-events:none;
+  background:linear-gradient(135deg,rgba(245,190,70,.18),transparent 35%,rgba(0,208,132,.06));
+  opacity:.6
 }
-
-.card {
-  background: linear-gradient(180deg, rgba(22,22,22,.96), rgba(7,7,7,.96));
-  border: 1px solid var(--border);
-  border-radius: 26px;
-  padding: 24px;
-  box-shadow: 0 24px 80px rgba(0,0,0,.62);
-  position: relative;
-  overflow: hidden;
+.card>*{position:relative;z-index:1}
+.logo{
+  display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#050505;padding:12px 20px;border-radius:999px;font-weight:950;
+  box-shadow:0 12px 36px rgba(245,190,70,.25)
 }
-
-.card::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  pointer-events: none;
-  border-radius: 26px;
-  background: linear-gradient(135deg, rgba(245,190,70,.20), transparent 30%, transparent 70%, rgba(245,190,70,.08));
-  opacity: .45;
+.logo-dot{width:10px;height:10px;border-radius:50%;background:#050505}
+.badge{
+  display:inline-block;padding:9px 13px;border-radius:999px;background:rgba(245,190,70,.10);
+  color:var(--gold);border:1px solid rgba(245,190,70,.25);font-size:12px;font-weight:900
 }
-
-.card > * {
-  position: relative;
-  z-index: 1;
+h1{font-size:clamp(32px,5vw,54px);line-height:1.02;margin:14px 0}
+h2{margin-top:0;font-size:25px}
+h3{margin-top:0}
+.muted{color:var(--muted);line-height:1.6}
+.gold{color:var(--gold);font-weight:900}.green{color:var(--green);font-weight:900}.red{color:var(--red);font-weight:900}
+.btn{
+  border:0;border-radius:999px;padding:14px 22px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#050505;font-weight:950;cursor:pointer;box-shadow:0 12px 30px rgba(245,190,70,.24);
+  transition:.2s
 }
-
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: linear-gradient(135deg, var(--gold), var(--gold2));
-  color: #050505;
-  padding: 12px 20px;
-  border-radius: 999px;
-  font-weight: 950;
-  letter-spacing: .3px;
-  box-shadow: 0 12px 36px rgba(245,190,70,.24);
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn.secondary{background:rgba(255,255,255,.06);color:var(--gold);border:1px solid rgba(245,190,70,.25)}
+.btn.danger{background:rgba(255,92,92,.15);color:#ffb4b4;border:1px solid rgba(255,92,92,.25)}
+.input,select{
+  width:100%;border:1px solid rgba(245,190,70,.24);background:#070707;color:#fff;
+  padding:14px 15px;border-radius:16px;outline:none;margin:8px 0
 }
-
-.logo-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #050505;
-  box-shadow: 0 0 0 4px rgba(5,5,5,.18);
+.input:focus,select:focus{border-color:rgba(245,190,70,.65);box-shadow:0 0 0 4px rgba(245,190,70,.08)}
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
+.login-card{width:100%;max-width:1040px;display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.scan-orb{
+  width:150px;height:150px;border-radius:50%;border:2px solid rgba(245,190,70,.45);
+  display:grid;place-items:center;color:var(--gold);font-size:52px;margin:26px 0;animation:pulse 1.7s infinite;position:relative
 }
-
-.badge {
-  display: inline-block;
-  padding: 9px 13px;
-  border-radius: 999px;
-  background: rgba(245,190,70,.10);
-  color: var(--gold);
-  border: 1px solid rgba(245,190,70,.22);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .6px;
+.scan-orb:before{
+  content:"";position:absolute;inset:18px;border-radius:50%;border:1px dashed rgba(245,190,70,.65);animation:spin 6s linear infinite
 }
-
-h1, h2, h3 {
-  margin-top: 0;
+@keyframes pulse{50%{box-shadow:0 0 50px rgba(245,190,70,.35)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.notice{
+  padding:15px;border-radius:18px;background:rgba(245,190,70,.1);border:1px solid rgba(245,190,70,.22);
+  color:#f8d990;font-size:13px;line-height:1.55
 }
-
-h1 {
-  font-size: clamp(30px, 5vw, 54px);
-  line-height: 1.02;
-  margin-bottom: 14px;
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:14px}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.nav button{
+  border:1px solid rgba(245,190,70,.18);background:rgba(255,255,255,.04);color:#ddd;
+  padding:10px 14px;border-radius:999px;cursor:pointer;font-weight:900
 }
-
-h2 {
-  font-size: 25px;
-  margin-bottom: 12px;
+.nav button.active{background:rgba(245,190,70,.16);color:var(--gold);border-color:rgba(245,190,70,.38)}
+.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.balance{font-size:clamp(36px,5vw,58px);font-weight:950;color:var(--gold);margin:12px 0}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.stat{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:14px}
+.stat span{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}
+.stat strong{color:var(--gold)}
+.chart{
+  height:170px;margin-top:18px;border-radius:20px;border:1px solid rgba(245,190,70,.16);
+  background:linear-gradient(to top,rgba(245,190,70,.08),transparent),
+  repeating-linear-gradient(to right,transparent,transparent 34px,rgba(255,255,255,.04) 35px),
+  repeating-linear-gradient(to top,transparent,transparent 34px,rgba(255,255,255,.035) 35px);
+  overflow:hidden
 }
-
-h3 {
-  font-size: 18px;
-  margin-bottom: 12px;
+.chart svg{width:100%;height:100%}
+.row,.tx,.market{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.065);
+  border-radius:16px;padding:13px;margin-bottom:10px;font-size:14px
 }
-
-.muted {
-  color: var(--muted);
-  line-height: 1.6;
+.action-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.76);backdrop-filter:blur(10px);
+  z-index:100;display:grid;place-items:center;padding:18px
 }
-
-.gold {
-  color: var(--gold);
+.modal{
+  width:100%;max-width:560px;background:linear-gradient(180deg,#171717,#070707);
+  border:1px solid rgba(245,190,70,.32);border-radius:26px;padding:24px;
+  box-shadow:0 25px 90px rgba(0,0,0,.78)
 }
-
-.green {
-  color: var(--green);
+.loader{
+  width:72px;height:72px;border-radius:50%;border:5px solid rgba(245,190,70,.14);
+  border-top-color:var(--gold);margin:24px auto;animation:spin 1s linear infinite
 }
-
-.red {
-  color: var(--red);
+.progress{height:10px;width:100%;background:#272727;border-radius:999px;overflow:hidden;margin-top:18px}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:999px;transition:.4s}
+.success-icon{
+  width:88px;height:88px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#00d084,#00a86b);font-size:48px;font-weight:950;
+  box-shadow:0 18px 45px rgba(0,208,132,.25)
 }
-
-.btn {
-  border: 0;
-  border-radius: 999px;
-  padding: 14px 22px;
-  background: linear-gradient(135deg, var(--gold), var(--gold2));
-  color: #050505;
-  font-weight: 950;
-  cursor: pointer;
-  box-shadow: 0 12px 30px rgba(245,190,70,.22);
-  transition: transform .18s ease, filter .18s ease;
+.card-visual{
+  height:150px;border-radius:22px;padding:20px;margin:14px 0;
+  background:linear-gradient(135deg,#1d1d1d,#080808 60%,#3b2b08);
+  border:1px solid rgba(245,190,70,.35);position:relative;overflow:hidden
 }
-
-.btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.06);
+.card-visual:before{
+  content:"";position:absolute;inset:-40px;background:radial-gradient(circle,rgba(245,190,70,.22),transparent 45%);
+  animation:float 3s infinite alternate
 }
-
-.btn.secondary {
-  background: rgba(255,255,255,.06);
-  color: var(--gold);
-  border: 1px solid rgba(245,190,70,.25);
-}
-
-.btn.danger {
-  background: rgba(255,92,92,.14);
-  color: #ff9b9b;
-  border: 1px solid rgba(255,92,92,.25);
-}
-
-.input {
-  width: 100%;
-  border: 1px solid rgba(245,190,70,.24);
-  background: #070707;
-  color: #fff;
-  padding: 14px 15px;
-  border-radius: 16px;
-  outline: none;
-  margin: 8px 0;
-}
-
-.input:focus {
-  border-color: rgba(245,190,70,.62);
-  box-shadow: 0 0 0 4px rgba(245,190,70,.08);
-}
-
-.login-wrap {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 1040px;
-  display: grid;
-  grid-template-columns: 1.05fr .95fr;
-  gap: 22px;
-  align-items: stretch;
-}
-
-.hero-panel {
-  min-height: 540px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.scan-orb {
-  width: 152px;
-  height: 152px;
-  border-radius: 50%;
-  border: 2px solid rgba(245,190,70,.45);
-  margin: 22px 0;
-  display: grid;
-  place-items: center;
-  color: var(--gold);
-  font-size: 52px;
-  animation: pulse 1.8s infinite;
-  position: relative;
-}
-
-.scan-orb::before {
-  content: "";
-  position: absolute;
-  inset: 18px;
-  border-radius: 50%;
-  border: 1px dashed rgba(245,190,70,.6);
-  animation: spin 6s linear infinite;
-}
-
-@keyframes pulse {
-  50% {
-    box-shadow: 0 0 48px rgba(245,190,70,.35);
-  }
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.notice {
-  padding: 15px;
-  border-radius: 18px;
-  background: rgba(245,190,70,.10);
-  border: 1px solid rgba(245,190,70,.22);
-  color: #f8d990;
-  font-size: 13px;
-  line-height: 1.55;
-}
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-  gap: 14px;
-}
-
-.nav {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.nav button {
-  border: 1px solid rgba(245,190,70,.18);
-  background: rgba(255,255,255,.04);
-  color: #ddd;
-  padding: 10px 14px;
-  border-radius: 999px;
-  cursor: pointer;
-  font-weight: 800;
-}
-
-.nav button.active {
-  background: rgba(245,190,70,.16);
-  color: var(--gold);
-  border-color: rgba(245,190,70,.38);
-}
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1.25fr .75fr;
-  gap: 18px;
-}
-
-.balance-card {
-  min-height: 260px;
-}
-
-.balance {
-  font-size: clamp(36px, 5vw, 58px);
-  font-weight: 950;
-  color: var(--gold);
-  margin: 12px 0;
-  letter-spacing: -1.6px;
-}
-
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 12px;
-  margin-top: 18px;
-}
-
-.stat {
-  background: rgba(255,255,255,.035);
-  border: 1px solid rgba(255,255,255,.07);
-  border-radius: 18px;
-  padding: 14px;
-}
-
-.stat span {
-  display: block;
-  color: var(--muted);
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-
-.stat strong {
-  color: var(--gold);
-}
-
-.chart {
-  height: 170px;
-  margin-top: 18px;
-  border-radius: 20px;
-  border: 1px solid rgba(245,190,70,.16);
-  background:
-    linear-gradient(to top, rgba(245,190,70,.08), transparent),
-    repeating-linear-gradient(to right, transparent, transparent 34px, rgba(255,255,255,.04) 35px),
-    repeating-linear-gradient(to top, transparent, transparent 34px, rgba(255,255,255,.035) 35px);
-  position: relative;
-  overflow: hidden;
-}
-
-.chart svg {
-  width: 100%;
-  height: 100%;
-}
-
-.market-list, .tx-list {
-  display: grid;
-  gap: 10px;
-}
-
-.market, .tx {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  background: rgba(255,255,255,.035);
-  border: 1px solid rgba(255,255,255,.065);
-  border-radius: 16px;
-  padding: 13px;
-  font-size: 14px;
-}
-
-.section {
-  margin-top: 18px;
-}
-
-.action-row {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.panel-grid {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 18px;
-  margin-top: 18px;
-}
-
-.kyc-steps {
-  display: grid;
-  gap: 12px;
-}
-
-.step {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 14px;
-  border-radius: 18px;
-  background: rgba(255,255,255,.035);
-  border: 1px solid rgba(255,255,255,.07);
-}
-
-.step-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  background: rgba(245,190,70,.12);
-  color: var(--gold);
-  font-weight: 900;
-}
-
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.72);
-  backdrop-filter: blur(10px);
-  z-index: 100;
-  display: grid;
-  place-items: center;
-  padding: 18px;
-}
-
-.modal {
-  width: 100%;
-  max-width: 480px;
-  background: linear-gradient(180deg,#171717,#070707);
-  border: 1px solid rgba(245,190,70,.32);
-  border-radius: 26px;
-  padding: 24px;
-  box-shadow: 0 25px 90px rgba(0,0,0,.75);
-}
-
-.loader {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  border: 5px solid rgba(245,190,70,.14);
-  border-top-color: var(--gold);
-  margin: 24px auto;
-  animation: spin 1s linear infinite;
-}
-
-.progress {
-  height: 10px;
-  width: 100%;
-  background: #272727;
-  border-radius: 999px;
-  overflow: hidden;
-  margin-top: 18px;
-}
-
-.bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg,var(--gold2),var(--gold));
-  border-radius: 999px;
-  transition: width .4s;
-}
-
-.success-icon {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  margin: 0 auto 18px;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg,#00d084,#00a86b);
-  color: #fff;
-  font-size: 48px;
-  font-weight: 950;
-  box-shadow: 0 18px 45px rgba(0,208,132,.25);
-}
-
-.qr-box {
-  display: inline-block;
-  background: #fff;
-  border-radius: 24px;
-  padding: 16px;
-  box-shadow: 0 18px 42px rgba(245,190,70,.20);
-}
-
-.qr-box img {
-  width: 210px;
-  height: 210px;
-  display: block;
-}
-
-@media (max-width: 880px) {
-  .login-card,
-  .dashboard-grid,
-  .panel-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .topbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .stat-grid,
-  .action-row {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-panel {
-    min-height: auto;
-  }
+@keyframes float{to{transform:translate(40px,20px)}}
+.card-chip{width:46px;height:34px;border-radius:8px;background:linear-gradient(135deg,#f5be46,#7c5b15);margin-bottom:22px}
+.card-brand{position:absolute;right:20px;bottom:18px;color:var(--gold);font-weight:950}
+.qr-box{display:inline-block;background:#fff;border-radius:24px;padding:16px;box-shadow:0 18px 42px rgba(245,190,70,.20)}
+.qr-box img{width:210px;height:210px;display:block}
+@media(max-width:880px){
+  .login-card,.grid,.panel-grid{grid-template-columns:1fr}
+  .topbar{align-items:flex-start;flex-direction:column}
+  .stat-grid,.action-row{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -530,40 +155,23 @@ h3 {
 
 <div id="loginScreen" class="login-wrap">
   <div class="login-card">
-    <section class="card hero-panel">
-      <div>
-        <div class="logo"><span class="logo-dot"></span>AurumX</div>
-        <br><br>
-        <span class="badge">EDUKATIVNI CYBER TRADING DEMO</span>
-        <h1>Futuristička simulacija trading računa.</h1>
-        <p class="muted">
-          Demo aplikacija za školski anti-phishing projekat. Nema stvarnog logina, nema čuvanja podataka i nema pravih transakcija.
-        </p>
-      </div>
-
-      <div>
-        <div class="scan-orb">◎</div>
-        <p class="muted">
-          Simulirani biometric/KYC flow, fake tržište, transakcije, uplata i povlačenje.
-        </p>
-      </div>
+    <section class="card">
+      <div class="logo"><span class="logo-dot"></span>AurumX</div>
+      <br><br>
+      <span class="badge">EDUKATIVNI CYBER TRADING DEMO</span>
+      <h1>Futuristička simulacija trading računa.</h1>
+      <p class="muted">Demo aplikacija za školski anti-phishing projekat. Nema stvarnog logina, nema čuvanja podataka i nema pravih transakcija.</p>
+      <div class="scan-orb">◎</div>
     </section>
 
-    <section class="card login-form">
+    <section class="card">
       <h2>Demo pristup</h2>
-      <p class="muted">
-        Polja ispod su samo vizuelni prikaz. Klik na dugme otvara demo dashboard.
-      </p>
-
-      <input class="input" placeholder="Demo korisnik" autocomplete="off">
-      <input class="input" placeholder="Demo lozinka" type="password" autocomplete="off">
-
+      <p class="muted">Polja su samo vizualni prikaz. Klik otvara demo dashboard.</p>
+      <input class="input" placeholder="Demo korisnik">
+      <input class="input" placeholder="Demo lozinka" type="password">
       <button class="btn" onclick="enterApp()">Uđi u demo račun</button>
-
-      <br>
-      <div class="notice">
-        <strong>Sigurnosna napomena:</strong> Nikada ne unosite stvarne lozinke, PIN kodove, kartične podatke ili osobne dokumente na neprovjerenim stranicama.
-      </div>
+      <br><br>
+      <div class="notice"><strong>Sigurnosna napomena:</strong> Nikada ne unosite stvarne lozinke, PIN kodove, podatke o kartici ili osobne dokumente na neprovjerenim stranicama.</div>
     </section>
   </div>
 </div>
@@ -572,321 +180,320 @@ h3 {
   <div class="topbar">
     <div class="logo"><span class="logo-dot"></span>AurumX</div>
     <div class="nav">
-      <button class="active" onclick="showTab('home', this)">Dashboard</button>
-      <button onclick="showTab('kyc', this)">KYC centar</button>
-      <button onclick="showTab('wallet', this)">Novčanik</button>
-      <button onclick="showTab('security', this)">Sigurnost</button>
+      <button class="active" onclick="showTab('home',this)">Dashboard</button>
+      <button onclick="showTab('kyc',this)">KYC centar</button>
+      <button onclick="showTab('wallet',this)">Novčanik</button>
+      <button onclick="showTab('security',this)">Sigurnost</button>
     </div>
   </div>
-    <!-- HOME -->
-  <div id="tab-home">
-    <div class="dashboard-grid">
+  <!-- HOME -->
+<div id="tab-home">
 
-      <section class="card balance-card">
-        <span class="badge">LIVE DEMO MARKET</span>
-        <h2>Ukupan saldo</h2>
+  <div class="grid">
 
-        <div class="balance">€ 124,820.42</div>
-
-        <p class="muted">
-          Simulirani portfolio i tržišni podaci.
-        </p>
-
-        <div class="stat-grid">
-          <div class="stat">
-            <span>Dnevna promjena</span>
-            <strong class="green">+8.42%</strong>
-          </div>
-
-          <div class="stat">
-            <span>Dostupno</span>
-            <strong>€ 82,120</strong>
-          </div>
-
-          <div class="stat">
-            <span>Zadržano</span>
-            <strong>€ 42,700</strong>
-          </div>
-        </div>
-
-        <div class="chart">
-          <svg viewBox="0 0 600 180" preserveAspectRatio="none">
-            <polyline
-              fill="none"
-              stroke="#f5be46"
-              stroke-width="4"
-              points="
-                0,160
-                40,150
-                80,120
-                120,135
-                160,90
-                200,100
-                240,70
-                280,80
-                320,55
-                360,65
-                400,42
-                440,52
-                480,28
-                520,34
-                560,18
-                600,10
-              "
-            />
-          </svg>
-        </div>
-
-        <div class="action-row">
-          <button class="btn" onclick="openModal('deposit')">Uplata</button>
-          <button class="btn secondary" onclick="openModal('withdraw')">Povlačenje</button>
-          <button class="btn secondary" onclick="openVerification()">Verifikacija</button>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>Tržište</h2>
-
-        <div class="market-list">
-          <div class="market">
-            <span>BTC / EUR</span>
-            <strong class="green">+2.14%</strong>
-          </div>
-
-          <div class="market">
-            <span>ETH / EUR</span>
-            <strong class="green">+1.32%</strong>
-          </div>
-
-          <div class="market">
-            <span>SOL / EUR</span>
-            <strong class="red">-0.41%</strong>
-          </div>
-
-          <div class="market">
-            <span>XRP / EUR</span>
-            <strong class="green">+4.11%</strong>
-          </div>
-
-          <div class="market">
-            <span>ADA / EUR</span>
-            <strong class="green">+0.92%</strong>
-          </div>
-        </div>
-
-        <div class="section">
-          <h3>Status računa</h3>
-
-          <div class="market">
-            <span>KYC status</span>
-            <strong class="gold">Potrebna provjera</strong>
-          </div>
-
-          <div class="market">
-            <span>Biometric status</span>
-            <strong class="green">Aktivno</strong>
-          </div>
-
-          <div class="market">
-            <span>Sigurnosni nivo</span>
-            <strong class="green">Visok</strong>
-          </div>
-        </div>
-      </section>
-
-    </div>
-
-    <div class="panel-grid">
-
-      <section class="card">
-        <h2>Fake transakcije</h2>
-
-        <div class="tx-list">
-
-          <div class="tx">
-            <span>BTC isplata</span>
-            <strong class="gold">Na čekanju</strong>
-          </div>
-
-          <div class="tx">
-            <span>USDT depozit</span>
-            <strong class="green">Završeno</strong>
-          </div>
-
-          <div class="tx">
-            <span>ETH konverzija</span>
-            <strong class="green">Završeno</strong>
-          </div>
-
-          <div class="tx">
-            <span>Deklaracija sredstava</span>
-            <strong class="gold">Potrebno</strong>
-          </div>
-
-          <div class="tx">
-            <span>KYC pregled</span>
-            <strong class="red">Nije dovršeno</strong>
-          </div>
-
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>QR pristup</h2>
-
-        <p class="muted">
-          Demo QR kod za simulirani pristup računu.
-        </p>
-
-        <div style="text-align:center;margin-top:20px">
-          <div class="qr-box">
-            <img src="QR.png" alt="QR kod">
-          </div>
-        </div>
-
-      </section>
-
-    </div>
-  </div>
-
-  <!-- KYC -->
-  <div id="tab-kyc" class="hidden">
     <section class="card">
-      <span class="badge">KYC CENTER</span>
-      <h2>Centar za verifikaciju</h2>
+      <span class="badge">LIVE DEMO MARKET</span>
+
+      <h2>Ukupan saldo</h2>
+
+      <div class="balance" id="balanceText">€ 124,820.42</div>
 
       <p class="muted">
-        Ovo je edukativni prikaz KYC procesa. Ne učitavaju se stvarni dokumenti niti se spremaju osobni podaci.
+        Simulirani portfolio i tržišni podaci.
       </p>
-
-      <div class="kyc-steps">
-
-        <div class="step">
-          <div class="step-icon">1</div>
-          <div>
-            <strong>Osnovni profil</strong>
-            <div class="muted">Status: dovršeno</div>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-icon">2</div>
-          <div>
-            <strong>Biometrijska provjera</strong>
-            <div class="muted">Status: aktivno</div>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="step-icon">3</div>
-          <div>
-            <strong>Deklaracija sredstava</strong>
-            <div class="muted">Status: potrebno</div>
-          </div>
-        </div>
-
-      </div>
-
-      <br>
-
-      <button class="btn" onclick="openVerification()">
-        Pokreni demo verifikaciju
-      </button>
-    </section>
-  </div>
-
-  <!-- WALLET -->
-  <div id="tab-wallet" class="hidden">
-    <section class="card">
-      <h2>Novčanik</h2>
 
       <div class="stat-grid">
 
         <div class="stat">
-          <span>BTC</span>
-          <strong>1.842 BTC</strong>
+          <span>Dnevna promjena</span>
+          <strong class="green">+8.42%</strong>
         </div>
 
         <div class="stat">
-          <span>ETH</span>
-          <strong>18.24 ETH</strong>
+          <span>Dostupno</span>
+          <strong id="availableText">€ 82,120</strong>
         </div>
 
         <div class="stat">
-          <span>USDT</span>
-          <strong>48,200 USDT</strong>
+          <span>Zadržano</span>
+          <strong id="holdText">€ 42,700</strong>
         </div>
 
       </div>
 
-      <div class="section">
-        <button class="btn" onclick="openModal('deposit')">Nova uplata</button>
-        <button class="btn secondary" onclick="openModal('withdraw')">Novo povlačenje</button>
+      <div class="chart">
+        <svg viewBox="0 0 600 180" preserveAspectRatio="none">
+          <polyline
+            fill="none"
+            stroke="#f5be46"
+            stroke-width="4"
+            points="
+              0,160
+              40,150
+              80,120
+              120,135
+              160,90
+              200,100
+              240,70
+              280,80
+              320,55
+              360,65
+              400,42
+              440,52
+              480,28
+              520,34
+              560,18
+              600,10
+            "
+          />
+        </svg>
       </div>
+
+      <div class="action-row">
+        <button class="btn" onclick="openDeposit()">Uplata</button>
+        <button class="btn secondary" onclick="openWithdraw()">Povlačenje</button>
+        <button class="btn secondary" onclick="openVerification()">Verifikacija</button>
+      </div>
+
     </section>
-  </div>
 
-  <!-- SECURITY -->
-  <div id="tab-security" class="hidden">
     <section class="card">
-      <h2>Sigurnosni centar</h2>
 
-      <div class="tx-list">
+      <h2>Tržište</h2>
+
+      <div class="market">
+        <span>BTC / EUR</span>
+        <strong class="green">+2.14%</strong>
+      </div>
+
+      <div class="market">
+        <span>ETH / EUR</span>
+        <strong class="green">+1.32%</strong>
+      </div>
+
+      <div class="market">
+        <span>SOL / EUR</span>
+        <strong class="red">-0.41%</strong>
+      </div>
+
+      <div class="market">
+        <span>XRP / EUR</span>
+        <strong class="green">+4.11%</strong>
+      </div>
+
+      <div class="market">
+        <span>ADA / EUR</span>
+        <strong class="green">+0.92%</strong>
+      </div>
+
+      <br>
+
+      <h3>Status računa</h3>
+
+      <div class="market">
+        <span>KYC status</span>
+        <strong class="gold">Potrebna provjera</strong>
+      </div>
+
+      <div class="market">
+        <span>Biometric status</span>
+        <strong class="green">Aktivno</strong>
+      </div>
+
+      <div class="market">
+        <span>Sigurnosni nivo</span>
+        <strong class="green">Visok</strong>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="panel-grid">
+
+    <section class="card">
+      <h2>Transakcije</h2>
+
+      <div id="txContainer">
 
         <div class="tx">
-          <span>2FA autentifikacija</span>
-          <strong class="green">Aktivno</strong>
+          <span>BTC isplata</span>
+          <strong class="gold">Na čekanju</strong>
         </div>
 
         <div class="tx">
-          <span>Biometric zaštita</span>
-          <strong class="green">Aktivno</strong>
-        </div>
-
-        <div class="tx">
-          <span>Anti-phishing kod</span>
-          <strong class="gold">Postavljeno</strong>
-        </div>
-
-        <div class="tx">
-          <span>Prepoznavanje uređaja</span>
-          <strong class="green">Sigurno</strong>
+          <span>USDT depozit</span>
+          <strong class="green">Završeno</strong>
         </div>
 
       </div>
     </section>
+
+    <section class="card">
+
+      <h2>QR pristup</h2>
+
+      <p class="muted">
+        Demo QR kod za simulirani pristup računu.
+      </p>
+
+      <div style="text-align:center;margin-top:20px">
+
+        <div class="qr-box">
+          <img src="QR.png">
+        </div>
+
+      </div>
+
+    </section>
+
   </div>
+
+</div>
+
+<!-- KYC -->
+<div id="tab-kyc" class="hidden">
+
+  <section class="card">
+
+    <span class="badge">KYC CENTER</span>
+
+    <h2>Centar za verifikaciju</h2>
+
+    <div class="row">
+      <span>Osnovni profil</span>
+      <strong class="green">Dovršeno</strong>
+    </div>
+
+    <div class="row">
+      <span>Biometrijska provjera</span>
+      <strong class="green">Aktivno</strong>
+    </div>
+
+    <div class="row">
+      <span>Deklaracija sredstava</span>
+      <strong class="gold">Potrebno</strong>
+    </div>
+
+    <br>
+
+    <button class="btn" onclick="openVerification()">
+      Pokreni demo verifikaciju
+    </button>
+
+  </section>
+
+</div>
+
+<!-- WALLET -->
+<div id="tab-wallet" class="hidden">
+
+  <section class="card">
+
+    <h2>Novčanik</h2>
+
+    <div class="stat-grid">
+
+      <div class="stat">
+        <span>BTC</span>
+        <strong>1.842 BTC</strong>
+      </div>
+
+      <div class="stat">
+        <span>ETH</span>
+        <strong>18.24 ETH</strong>
+      </div>
+
+      <div class="stat">
+        <span>USDT</span>
+        <strong>48,200 USDT</strong>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<!-- SECURITY -->
+<div id="tab-security" class="hidden">
+
+  <section class="card">
+
+    <h2>Sigurnosni centar</h2>
+
+    <div class="tx">
+      <span>2FA autentifikacija</span>
+      <strong class="green">Aktivno</strong>
+    </div>
+
+    <div class="tx">
+      <span>Biometric zaštita</span>
+      <strong class="green">Aktivno</strong>
+    </div>
+
+    <div class="tx">
+      <span>Anti-phishing kod</span>
+      <strong class="gold">Postavljeno</strong>
+    </div>
+
+  </section>
+
+</div>
 
 </div>
 
 <!-- MODAL -->
 <div id="modalBackdrop" class="modal-backdrop hidden">
+
   <div class="modal">
 
-    <div id="modalDeposit" class="hidden">
-      <h2>Nova uplata</h2>
+    <!-- DEPOSIT -->
+    <div id="depositModal" class="hidden">
 
-      <p class="muted">
-        Ovo je simulacija procesa uplate.
-      </p>
+      <h2>Uplata sredstava</h2>
 
-      <input class="input" placeholder="Iznos u EUR">
-      <button class="btn" onclick="closeModal()">Potvrdi</button>
+      <div class="card-visual">
+        <div class="card-chip"></div>
+        <div style="font-size:22px;font-weight:900;margin-top:20px">
+          •••• •••• •••• 4829
+        </div>
+        <div style="margin-top:12px;color:#ddd">
+          VISA / MASTERCARD
+        </div>
+        <div class="card-brand">AurumX Pay</div>
+      </div>
+
+      <input class="input" id="depositAmount" placeholder="Iznos u EUR">
+      <input class="input" placeholder="DEMO broj kartice">
+      <input class="input" placeholder="DEMO ime vlasnika">
+
+      <button class="btn" onclick="confirmDeposit()">
+        Potvrdi uplatu
+      </button>
+
     </div>
 
-    <div id="modalWithdraw" class="hidden">
+    <!-- WITHDRAW -->
+    <div id="withdrawModal" class="hidden">
+
       <h2>Povlačenje sredstava</h2>
 
-      <p class="muted">
-        Simulirani prikaz povlačenja sredstava.
-      </p>
+      <input class="input" placeholder="Ime">
+      <input class="input" placeholder="Prezime">
+      <input class="input" placeholder="Broj osobne iskaznice">
+      <input class="input" id="withdrawAmount" placeholder="Iznos za povlačenje">
 
-      <input class="input" placeholder="Iznos za povlačenje">
-      <button class="btn danger" onclick="closeModal()">Potvrdi</button>
+      <button class="btn danger" onclick="confirmWithdraw()">
+        Pokreni isplatu
+      </button>
+
     </div>
 
-    <div id="modalVerification" class="hidden">
-      <h2>Verifikacija u toku</h2>
+    <!-- LOADING -->
+    <div id="verificationModal" class="hidden">
+
+      <h2>Obrada zahtjeva</h2>
 
       <p class="muted">
         Molimo pričekajte dok se obrađuje status zahtjeva.
@@ -898,25 +505,50 @@ h3 {
         <div class="bar" id="bar"></div>
       </div>
 
-      <p class="muted" id="timerText">Molimo sačekajte: 15s</p>
-    </div>
-
-    <div id="modalSuccess" class="hidden">
-      <div class="success-icon">✓</div>
-
-      <h2>Verifikacija uspješna</h2>
-
-      <p class="muted">
-        Proces je uspješno dovršen.
+      <p class="muted" id="timerText">
+        Molimo sačekajte: 15s
       </p>
 
-      <button class="btn" onclick="closeModal()">Zatvori</button>
+    </div>
+
+    <!-- SUCCESS -->
+    <div id="successModal" class="hidden">
+
+      <div class="success-icon">✓</div>
+
+      <h2 id="successTitle">Proces uspješan</h2>
+
+      <p class="muted" id="successText">
+        Operacija je uspješno završena.
+      </p>
+
+      <button class="btn" onclick="closeModal()">
+        Zatvori
+      </button>
+
     </div>
 
   </div>
+
 </div>
 
 <script>
+
+let totalBalance = 124820.42;
+let available = 82120;
+let hold = 42700;
+
+function updateUI() {
+
+  document.getElementById("balanceText").innerText =
+    "€ " + totalBalance.toLocaleString();
+
+  document.getElementById("availableText").innerText =
+    "€ " + available.toLocaleString();
+
+  document.getElementById("holdText").innerText =
+    "€ " + hold.toLocaleString();
+}
 
 function enterApp() {
   document.getElementById("loginScreen").classList.add("hidden");
@@ -939,26 +571,99 @@ function showTab(tab, btn) {
   btn.classList.add("active");
 }
 
-function openModal(type) {
+function resetModals() {
 
+  document.getElementById("depositModal").classList.add("hidden");
+  document.getElementById("withdrawModal").classList.add("hidden");
+  document.getElementById("verificationModal").classList.add("hidden");
+  document.getElementById("successModal").classList.add("hidden");
+}
+
+function openDeposit() {
   document.getElementById("modalBackdrop").classList.remove("hidden");
+  resetModals();
+  document.getElementById("depositModal").classList.remove("hidden");
+}
 
-  document.getElementById("modalDeposit").classList.add("hidden");
-  document.getElementById("modalWithdraw").classList.add("hidden");
-  document.getElementById("modalVerification").classList.add("hidden");
-  document.getElementById("modalSuccess").classList.add("hidden");
-
-  if(type === "deposit") {
-    document.getElementById("modalDeposit").classList.remove("hidden");
-  }
-
-  if(type === "withdraw") {
-    document.getElementById("modalWithdraw").classList.remove("hidden");
-  }
+function openWithdraw() {
+  document.getElementById("modalBackdrop").classList.remove("hidden");
+  resetModals();
+  document.getElementById("withdrawModal").classList.remove("hidden");
 }
 
 function closeModal() {
   document.getElementById("modalBackdrop").classList.add("hidden");
+}
+
+function addTransaction(text, status, cls) {
+
+  let div = document.createElement("div");
+
+  div.className = "tx";
+
+  div.innerHTML =
+    "<span>" + text + "</span>" +
+    "<strong class='" + cls + "'>" + status + "</strong>";
+
+  document.getElementById("txContainer").prepend(div);
+}
+
+function confirmDeposit() {
+
+  let amount =
+    parseFloat(document.getElementById("depositAmount").value);
+
+  if(!amount || amount <= 0) return;
+
+  totalBalance += amount;
+  available += amount;
+
+  updateUI();
+
+  addTransaction(
+    "Uplata € " + amount,
+    "Uplaćeno",
+    "green"
+  );
+
+  resetModals();
+
+  document.getElementById("successModal").classList.remove("hidden");
+
+  document.getElementById("successTitle").innerText =
+    "Uplata uspješna";
+
+  document.getElementById("successText").innerText =
+    "Sredstva su uspješno dodana na demo račun.";
+}
+
+function confirmWithdraw() {
+
+  let amount =
+    parseFloat(document.getElementById("withdrawAmount").value);
+
+  if(!amount || amount <= 0) return;
+
+  totalBalance -= amount;
+  available -= amount;
+
+  updateUI();
+
+  addTransaction(
+    "Isplata € " + amount,
+    "U procesu",
+    "gold"
+  );
+
+  resetModals();
+
+  document.getElementById("successModal").classList.remove("hidden");
+
+  document.getElementById("successTitle").innerText =
+    "Isplata pokrenuta";
+
+  document.getElementById("successText").innerText =
+    "Zahtjev za isplatu je poslan i trenutno se obrađuje.";
 }
 
 let seconds = 15;
@@ -972,14 +677,14 @@ function openVerification() {
 
   document.getElementById("modalBackdrop").classList.remove("hidden");
 
-  document.getElementById("modalDeposit").classList.add("hidden");
-  document.getElementById("modalWithdraw").classList.add("hidden");
-  document.getElementById("modalSuccess").classList.add("hidden");
+  resetModals();
 
-  document.getElementById("modalVerification").classList.remove("hidden");
+  document.getElementById("verificationModal")
+    .classList.remove("hidden");
 
   document.getElementById("bar").style.width = "0%";
-  document.getElementById("timerText").textContent =
+
+  document.getElementById("timerText").innerText =
     "Molimo sačekajte: 15s";
 
   interval = setInterval(() => {
@@ -987,22 +692,32 @@ function openVerification() {
     seconds--;
     progress += 100 / 15;
 
-    document.getElementById("bar").style.width = progress + "%";
+    document.getElementById("bar").style.width =
+      progress + "%";
 
-    document.getElementById("timerText").textContent =
+    document.getElementById("timerText").innerText =
       "Molimo sačekajte: " + seconds + "s";
 
     if(seconds <= 0) {
 
       clearInterval(interval);
 
-      document.getElementById("modalVerification").classList.add("hidden");
-      document.getElementById("modalSuccess").classList.remove("hidden");
+      resetModals();
 
+      document.getElementById("successModal")
+        .classList.remove("hidden");
+
+      document.getElementById("successTitle").innerText =
+        "Verifikacija uspješna";
+
+      document.getElementById("successText").innerText =
+        "KYC proces je uspješno dovršen.";
     }
 
-  }, 1000);
+  },1000);
 }
+
+updateUI();
 
 </script>
 
